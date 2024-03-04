@@ -1,0 +1,3 @@
+static folder hold our static file preety much everything that the browser would cash and in fact
+just we can separate all the differt thing in it
+1 sub folder frontend hold our main javascript bundle
