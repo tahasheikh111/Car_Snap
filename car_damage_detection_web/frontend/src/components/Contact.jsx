@@ -6,6 +6,6 @@ export default class Contact extends Component {
     }
     render() {
         // if we insert javascript code in tags we use {} this bracket to write
-        return <h1> This is COntact Page </h1>
+        return <h1> This is MY OWN CAR SNAP CONTACT US Page </h1>
     }
 }

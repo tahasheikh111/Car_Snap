@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Home from "./Home";
+import Home from "./Home.jsx";
 
 
 import { render } from "react-dom";
@@ -14,7 +14,7 @@ export default class App extends Component {
             <div>
             <Home/>
             </div>
-        )
+        );
     }
 }
 console.log("BEFORE GET ELEMENT");
