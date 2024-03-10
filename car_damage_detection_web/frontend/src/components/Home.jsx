@@ -16,9 +16,16 @@ export default class HomePage extends Component {
         <Routes>
           <Route path="/" element={<p>This is the My Own home page</p>} />
           <Route path="/AboutUs" element={<AboutUs />} />
+<<<<<<< Updated upstream
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Pricing" element={<Pricing />} />
+=======
+          <Route path="/ReviewPage" element={<ReviewPage />} />
+          <Route path="/Contact" element={<Contact/>} />
+          <Route path="/Ratingpage" element={<RatingPage />} />
+>>>>>>> Stashed changes
           <Route path="/Profile" element={<Profile />} />
+          <Route path="/Pricing" element={<Pricing />} />
 
         </Routes>
       </Router>

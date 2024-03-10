@@ -1,28 +1,15 @@
-<<<<<<< Updated upstream
-import React, { Component } from "react";
-
-export default class Pricing extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        // if we insert javascript code in tags we use {} this bracket to write
-        return <h1> This is Pricing Page </h1>
-    }
-}
-=======
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// Sample user messages data
-const userMessages = [
+// Sample ratings data
+const ratings = [
   {
     id: 1,
     user: {
       name: 'John Doe',
       imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
     },
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    rating: 4.5,
   },
   {
     id: 2,
@@ -30,16 +17,15 @@ const userMessages = [
       name: 'Jane Smith',
       imageUrl: 'https://randomuser.me/api/portraits/women/2.jpg',
     },
-    text: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
+    rating: 3.8,
   },
-  // Add more sample comments as needed
   {
     id: 3,
     user: {
       name: 'Alice Johnson',
       imageUrl: 'https://randomuser.me/api/portraits/women/3.jpg',
     },
-    text: 'Donec auctor euismod massa, et lacinia mauris.',
+    rating: 5,
   },
   {
     id: 4,
@@ -47,81 +33,103 @@ const userMessages = [
       name: 'Bob Williams',
       imageUrl: 'https://randomuser.me/api/portraits/men/4.jpg',
     },
-    text: 'Vestibulum ut nisl vel arcu euismod malesuada.',
+    rating: 2.5,
   },
   {
     id: 5,
     user: {
-      name: 'Eve Brown',
+      name: 'Eve Anderson',
       imageUrl: 'https://randomuser.me/api/portraits/women/5.jpg',
     },
-    text: 'Fusce euismod fermentum ante, vel egestas lorem facilisis vel.',
+    rating: 4,
   },
   {
     id: 6,
     user: {
-      name: 'Tom Wilson',
+      name: 'Mike Wilson',
       imageUrl: 'https://randomuser.me/api/portraits/men/6.jpg',
     },
-    text: 'Sed tincidunt auctor erat, at tristique risus varius sit amet.',
-  },
-  {
-    id: 7,
-    user: {
-      name: 'Mary Davis',
-      imageUrl: 'https://randomuser.me/api/portraits/women/7.jpg',
-    },
-    text: 'Integer et augue et massa aliquam tempus.',
-  },
-  {
-    id: 8,
-    user: {
-      name: 'Chris Miller',
-      imageUrl: 'https://randomuser.me/api/portraits/men/8.jpg',
-    },
-    text: 'Nulla vel tortor nec mauris pharetra lobortis.',
-  },
-  {
-    id: 9,
-    user: {
-      name: 'Laura White',
-      imageUrl: 'https://randomuser.me/api/portraits/women/9.jpg',
-    },
-    text: 'Praesent nec neque nec orci sodales convallis id non lectus.',
-  },
-  {
-    id: 10,
-    user: {
-      name: 'Alex Green',
-      imageUrl: 'https://randomuser.me/api/portraits/men/10.jpg',
-    },
-    text: 'Morbi venenatis metus non erat interdum, a mattis dui accumsan.',
+    rating: 3.2,
   },
 ];
 
-const SnapTalksPage = () => {
+const RatingPage = () => {
+  // Function to render star rating
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < Math.floor(rating)) {
+        stars.push(<span key={i} style={{ color: 'gold' }}>★</span>);
+      } else {
+        stars.push(<span key={i}>★</span>);
+      }
+    }
+    return stars;
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100vw', backgroundColor: '#f8f9fa', fontFamily: 'Arial, sans-serif', }}>
+    <div style={{
+      fontFamily: 'Arial, sans-serif',
+      margin: 0,
+      padding: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      width: '100vw', // Full width of the viewport
+      backgroundColor: 'grey', 
+    }}>
       {/* Header */}
-      <header style={{ padding: '10px', backgroundColor: 'white', color: 'black', textAlign: 'center', borderBottom: '1px solid #ccc' }}>
-        <h1 style={{ fontWeight: 'bold', fontSize: '38px', margin: '0' }}>Snap Talks</h1>
+      <header style={{
+        backgroundColor: 'white',
+        color: 'black',
+        padding: '20px',
+        width: '100%',
+        textAlign: 'center',
+      }}>
+        <h1 style={{ fontWeight: 'bold', fontSize: '24px', margin: '0' }}>Ratings</h1>
       </header>
-  
-      {/* Main content */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexGrow: 1, padding: '20px' }}>
-        {userMessages.map((msg) => (
-          <div key={msg.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', padding: '10px', borderRadius: '5px', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', width: '100%', maxWidth: '400px' }}>
-            <img src={msg.user.imageUrl} alt={msg.user.name} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '10px' }} />
-            <div>
-              <div style={{ fontWeight: 'bold' }}>{msg.user.name}</div>
-              <div>{msg.text}</div>
+
+      {/* Ratings list */}
+      <div style={{
+        flex: 1, // Grow to fill remaining space
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        boxSizing: 'border-box',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)', // White background with opacity
+      }}>
+        {ratings.map((rating) => (
+          <div key={rating.id} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            backgroundColor: 'white', // White background color for each rating
+            padding: '20px',
+            borderRadius: '10px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            maxWidth: '600px',
+            width: '100%',
+            marginBottom: '20px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+              <img src={rating.user.imageUrl} alt={rating.user.name} style={{
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                marginRight: '20px',
+              }} />
+              <div>
+                <h3 style={{ margin: '0' }}>{rating.user.name}</h3>
+                <p style={{ margin: '0', fontSize: '14px', color: '#888' }}>
+                  {renderStars(rating.rating)} ({rating.rating.toFixed(1)})
+                </p>
+              </div>
             </div>
           </div>
         ))}
       </div>
-
-      {/* Footer */}
-      <footer style={{ backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center', borderTop: '1px solid #ccc' }}>
+{/* Footer */}
+<footer style={{ backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center', borderTop: '1px solid #ccc' }}>
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
     <Link to="/" style={{ textDecoration: 'none' }}>
       <button style={{ backgroundColor: 'transparent', color: '#fff', border: 'none', padding: '5px 10px', cursor: 'pointer' }}>Home</button>
@@ -151,9 +159,10 @@ const SnapTalksPage = () => {
     <button style={{ backgroundColor: 'white', color: '#333', border: 'none', padding: '5px 10px', cursor: 'pointer' }}>Enter</button>
   </div>
 </footer>
+
+      
     </div>
   );
 };
 
-export default SnapTalksPage;
->>>>>>> Stashed changes
+export default RatingPage;

@@ -1,21 +1,11 @@
-<<<<<<< Updated upstream
-import React, { Component } from "react";
-
-export default class Pricing extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        // if we insert javascript code in tags we use {} this bracket to write
-        return <h1> This is Pricing Page </h1>
-    }
-}
-=======
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// Sample user messages data
-const userMessages = [
+
+// Sample comments data
+const comments = [
+  // Your sample comments data here
+
   {
     id: 1,
     user: {
@@ -99,25 +89,72 @@ const userMessages = [
   },
 ];
 
-const SnapTalksPage = () => {
+const ReviewPage = () => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100vw', backgroundColor: '#f8f9fa', fontFamily: 'Arial, sans-serif', }}>
+    <div style={{
+      fontFamily: 'Arial, sans-serif',
+      margin: 0,
+      padding: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      width: '100vw', // Full width of the viewport
+      backgroundColor: 'grey', 
+    }}>
       {/* Header */}
-      <header style={{ padding: '10px', backgroundColor: 'white', color: 'black', textAlign: 'center', borderBottom: '1px solid #ccc' }}>
-        <h1 style={{ fontWeight: 'bold', fontSize: '38px', margin: '0' }}>Snap Talks</h1>
+      <header style={{
+        backgroundColor: 'white',
+        color: 'black',
+        padding: '20px',
+        width: '100%',
+        textAlign: 'center',
+      }}>
+        <h1 style={{ fontWeight: 'bold', fontSize: '32px', margin: '0' }}>Reviews</h1>
       </header>
-  
-      {/* Main content */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexGrow: 1, padding: '20px' }}>
-        {userMessages.map((msg) => (
-          <div key={msg.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', padding: '10px', borderRadius: '5px', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', width: '100%', maxWidth: '400px' }}>
-            <img src={msg.user.imageUrl} alt={msg.user.name} style={{ width: '36px', height: '36px', borderRadius: '50%', marginRight: '10px' }} />
-            <div>
-              <div style={{ fontWeight: 'bold' }}>{msg.user.name}</div>
-              <div>{msg.text}</div>
+
+      {/* Reviews */}
+      <div style={{
+        flex: 1, // Grow to fill remaining space
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+        padding: '20px',
+        boxSizing: 'border-box',
+        overflowY: 'auto', // Enable vertical scroll
+      }}>
+        <div style={{
+          minWidth: '80%', // Minimum width for content
+          maxWidth: 'calc(100vw - 40px)', // Maximum width for content (40px for padding)
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '20px',
+        }}>
+          {/* List of comments */}
+          {comments.map((comment) => (
+            <div key={comment.id} style={{
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: '#f8f9fa',
+              padding: '20px',
+              borderRadius: '10px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              maxWidth: '400px',
+              width: '100%',
+            }}>
+              <img src={comment.user.imageUrl} alt={comment.user.name} style={{
+                width: '80px',
+                height: '80px',
+                borderRadius: '50%',
+                marginRight: '20px',
+              }} />
+              <div style={{ flexGrow: 1, textAlign: 'left' }}>
+                <h3>{comment.user.name}</h3>
+                <p>{comment.text}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Footer */}
@@ -151,9 +188,9 @@ const SnapTalksPage = () => {
     <button style={{ backgroundColor: 'white', color: '#333', border: 'none', padding: '5px 10px', cursor: 'pointer' }}>Enter</button>
   </div>
 </footer>
+
     </div>
   );
 };
 
-export default SnapTalksPage;
->>>>>>> Stashed changes
+export default ReviewPage;
