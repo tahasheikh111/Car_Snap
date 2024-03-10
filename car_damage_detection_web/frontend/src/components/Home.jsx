@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import AboutUs from "./AboutUs";
-import Contact from "./Contact";
-import Pricing from "./Pricing";
-import Profile from "./Profile";
+import AboutUs from "./AboutUs.jsx";
+import Contact from "./Contact.jsx";
+import Pricing from "./Pricing.jsx";
+import Profile from "./Profile.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default class HomePage extends Component {
