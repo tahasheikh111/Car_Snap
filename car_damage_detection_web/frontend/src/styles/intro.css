@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     padding: 20px;
+    overflow: auto;
 }
 
 .header_component {
@@ -38,7 +39,7 @@
 }
 
 .picture img {
-    max-width: 100%;
-    height: auto;
+    max-width: 50%;
+    height: 50%;
     border-radius: 8px;
 }
