@@ -3,19 +3,21 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    color: red;
+   /* overflow-y: scroll;  Add scroll to the body */
 }
 
 #app {
     width: 100%;
-    height: 100%;
     display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Set minimum height to 100% of the viewport height */
 }
 
 #main {
-    position: fixed;
+    flex: 1; /* Allow main content to grow and take up remaining space */
+}
+
+footer {
     width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
+    flex-shrink: 0; /* Prevent footer from shrinking */
 }
