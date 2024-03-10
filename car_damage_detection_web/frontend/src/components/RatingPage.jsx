@@ -75,7 +75,7 @@ const RatingPage = () => {
       flexDirection: 'column',
       minHeight: '100vh',
       width: '100vw', // Full width of the viewport
-      backgroundColor: 'grey', 
+      backgroundColor: 'white', 
     }}>
       {/* Header */}
       <header style={{
