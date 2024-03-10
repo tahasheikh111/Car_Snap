@@ -3,6 +3,7 @@ import Home from "./Home.jsx";
 
 
 import { render } from "react-dom";
+import RatingPage from "./RatingPage.jsx";
 
 export default class App extends Component {
     constructor(props) {
@@ -12,12 +13,11 @@ export default class App extends Component {
         // if we insert javascript code in tags we use {} this bracket to write
         return (
             <div>
-            <Home/>
+            <RatingPage/>
             </div>
         );
     }
 }
 console.log("BEFORE GET ELEMENT");
 const appDiv = document.getElementById("app");
-render(<App />, appDiv);
-
+render(<App />, appDiv);
