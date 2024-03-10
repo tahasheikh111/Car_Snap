@@ -1,4 +1,6 @@
 
+
+
 Set-ExecutionPolicy RemoteSigned -Scope Process
 .\se_environment\Scripts\activate
 cd car_damage_detection_web
