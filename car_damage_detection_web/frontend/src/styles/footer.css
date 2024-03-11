@@ -1,0 +1,84 @@
+/* Footer styles */
+
+footer {
+    background-color: #000000;
+    color: #fff;
+    text-align: center;
+}
+
+.footer-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    /* Enable flex items to wrap to the next line */
+    justify-content: space-evenly;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.footer-buttons a {
+    text-decoration: none;
+}
+
+.footer-buttons button {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 5px;
+    /* Add margin for spacing between buttons */
+}
+
+.subscribe-section {
+    display: flex;
+    flex-wrap: wrap;
+    /* Enable flex items to wrap to the next line */
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 0;
+}
+
+.subscribe-section p {
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 22px;
+    line-height: 1.0;
+}
+
+.subscribe-section input {
+    padding: 5px 8px;
+    margin: 5px;
+    /* Add margin for spacing between input and button */
+}
+
+.subscribe-section button {
+    background-color: white;
+    color: #000000;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    /* Add margin for spacing between input and button */
+}
+
+.action-button_component {
+    align-self: flex-end;
+    padding: 10px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
+/* Media queries for responsiveness */
+
+@media (max-width: 768px) {
+    .footer-buttons,
+    .subscribe-section {
+        flex-direction: column;
+        /* Change flex direction to column on smaller screens */
+        align-items: center;
+    }
+}

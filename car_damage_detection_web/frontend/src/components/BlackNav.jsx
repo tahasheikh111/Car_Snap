@@ -5,9 +5,9 @@ const BlackNav = () => {
         <div class="navbar">
             <div class="center-box">
                 <a href="#" class="nav-link">Home</a>
-                <a href="#" class="nav-link">Contact Us</a>
+                <a href="#" class="nav-link">Contact</a>
                 <a href="#" class="nav-link">Community</a>
-                <a href="#" class="nav-link">About Us</a>
+                <a href="#" class="nav-link">About</a>
                 <a href="#" class="nav-link">Reviews</a>
                 <a href="#" class="nav-link">Ratings</a>
                 <a href="#" class="nav-link">Login/Signup</a>

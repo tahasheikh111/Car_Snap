@@ -4,7 +4,7 @@ import abdullah from '../images/abdullah.png';
 import taha from '../images/taha.png';
 import mousa from '../images/mousa.png';
 import rameez from '../images/rameez.png';
-
+import Footer from "./Footer.jsx";
 
 const Developers = () => {
   const developersData = [
@@ -25,7 +25,9 @@ const Developers = () => {
         </div>
       ))}
     </div>
+    <Footer/>
     </>
+
   );
 };
 

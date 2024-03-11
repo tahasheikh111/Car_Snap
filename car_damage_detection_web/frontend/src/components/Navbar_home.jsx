@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from 'react';
 import '../styles/navbar.css'
 import 'flowbite/dist/flowbite.css'; // Import Flowbite styles
 import BlackNav from "./BlackNav.jsx";
@@ -6,9 +6,24 @@ import Intro from "./Intro.jsx"
 import Home_review from "./Home_review.jsx"
 import "../styles/intro.css"
 import imagepath from "../images/user.png"
+import AiImage from "../images/Ai_Car_Snap.jpg"
 import Ads_section from './Ads_section.jsx';
 import Developers from "./Developers.jsx";
 const Navbar_home = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  useEffect(() => {
+    // Update the current date every second
+    const intervalId = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const formattedDate = currentDate.toLocaleString();
+
   return (
     <><div className="header">
       <div className="car-snap-container">
@@ -43,18 +58,29 @@ const Navbar_home = () => {
               date="March 10, 2024"
               rating={4.5}
             />
+            <Home_review
+              photoSrc={imagepath}
+              heading="Example Heading"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+              name="John Doe"
+              date="March 10, 2024"
+              rating={4.5}
+            />
           </div>
+
 
           {/* Right side: Ads_section component */}
           <div style={{ flex: 1 }}>
+          <h1 style={{ fontSize: '25px', marginBottom: '10px', borderBottom: '2px solid' }}>Current Date:</h1>
+            <h2 style={{ fontSize: '16px' }}>{formattedDate}</h2>
             <Ads_section
-              heading="AddCard Heading"
-              imageUrl={imagepath}
-              features={['Feature 1', 'Feature 2', 'Feature 3']}
+              heading={"CAR SNAP"}
+              imageUrl={AiImage}
+              features={['1- Cost-Effective Car Classification', '2- User-Friendly Interface', '3- Precise Car Damage Recognition']}
             />
           </div>
         </div>
-      <Developers/>
+        <Developers />
 
 
       </div>

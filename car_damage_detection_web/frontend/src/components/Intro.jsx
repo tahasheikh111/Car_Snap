@@ -12,6 +12,12 @@ const Intro = () => {
       <div className="content_component">
         <p>
         Harnessing intelligent technology, our Car Damage Classifier swiftly and precisely identifies diverse car damages, expediting decisions on repairs and insurance for a seamless and efficient process.
+        <br />
+        <br />
+        <br />
+        <strong>Text:</strong>
+            <span style={{ margin: '0px 75px 0px 5px' }}>team@carsnap</span>
+            <strong>Duration</strong>: Classifies in seconds
         </p>
         <button className="action-button_component">Upload</button>
       </div>

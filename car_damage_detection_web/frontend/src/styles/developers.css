@@ -9,7 +9,7 @@
 
 .developers-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .developer-box {

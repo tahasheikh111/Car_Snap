@@ -12,10 +12,13 @@ const Ads_section = ({ heading, imageUrl, features }) => {
         <img src={imageUrl} alt="AddCard Image" />
       </div>
       <div className="add-card-features">
-        <h3>Features:</h3>
+        <h3 style={{ fontWeight: 'bold', fontSize: '20px' }}>Features:</h3>
         <ul>
           {features.map((feature, index) => (
-            <li key={index}>{feature}</li>
+            <React.Fragment key={index}>
+              <li>{feature}</li>
+              {index !== features.length - 1 && <hr style={{ borderTop: '2px solid #000', margin: '8px 0' }} />}
+            </React.Fragment>
           ))}
         </ul>
       </div>
