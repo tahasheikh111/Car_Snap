@@ -17,11 +17,11 @@ export default class HomePage extends Component {
       <Router>
         <div>
           <div>
-            <Navbar_home />
-            <Footer/>
-          </div>
-          <div>
             <Routes>
+              <Route path="/" element={<div>
+                                          <Navbar_home />
+                                          <Footer/>
+                                      </div>} />
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/Contact" element={<Contact />} />
               <Route path="/Pricing" element={<Pricing />} />
