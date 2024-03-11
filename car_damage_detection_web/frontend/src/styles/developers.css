@@ -1,0 +1,47 @@
+/* developers.css */
+
+.developers-heading {
+    margin: 0;
+    font-weight: bold;
+    font-size: 40px;
+    border-bottom: 2px solid black;
+}
+
+.developers-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.developer-box {
+    margin: 20px;
+    width: 45%;
+    /* Adjust as needed */
+    padding: 15px;
+    /* Add padding for better spacing */
+    border: 2px solid #ccc;
+    /* Set the border color and width */
+    border-radius: 8px;
+    /* Optional: Add border-radius for rounded corners */
+    box-sizing: border-box;
+    /* Include padding and border in the box size */
+    display: flex;
+    flex-direction: column;
+    /* or row based on your layout preference */
+    align-items: center;
+    /* to center items horizontally */
+    text-align: center;
+    /* to center text horizontally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Add a subtle drop shadow */
+}
+
+.developer-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.developer-name {
+    font-weight: bold;
+}

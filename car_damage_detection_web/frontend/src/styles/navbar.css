@@ -3,7 +3,6 @@
 .header {
     display: flex;
     align-items: center;
-    position: relative;
 }
 
 .car-snap-container {
@@ -13,20 +12,19 @@
 
 .car-snap-text {
     margin: 0;
-    font-size: 1em;
     font-weight: bold;
+    border-bottom: 2px solid black;
 }
 
 .car-snap-heading {
-    font-size: 4em;
-    font-weight: bolder;
-    position: inherit;
+    font-size: 80px;
+    font-weight: 900;
+    width: 100%;
+    text-align: center;
     margin: 0%;
 }
 
 .line {
-    position: fixed;
-    left: 0;
     width: 100%;
     height: 2px;
     background-color: black;

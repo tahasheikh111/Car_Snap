@@ -4,6 +4,7 @@ import Contact from "./Contact.jsx";
 import Pricing from "./Pricing.jsx";
 import Profile from "./Profile.jsx";
 import Navbar_home from "./Navbar_home.jsx";
+import Footer from "./Footer.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default class HomePage extends Component {
@@ -17,6 +18,7 @@ export default class HomePage extends Component {
         <div>
           <div>
             <Navbar_home />
+            <Footer/>
           </div>
           <div>
             <Routes>

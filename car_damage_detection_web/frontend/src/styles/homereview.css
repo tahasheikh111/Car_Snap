@@ -1,0 +1,55 @@
+/* PhotoCard.css */
+
+.photo-card {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.photo-container {
+    flex: 1;
+    overflow: hidden;
+}
+
+.photo {
+    width: 120px;
+    height: auto;
+    object-fit: cover;
+}
+
+.photo-card-content-container {
+    flex: 2;
+    padding: 16px;
+}
+
+.photo-card-heading {
+    font-size: 1.5em;
+    margin-bottom: 8px;
+}
+
+.photo-card-description {
+    margin-bottom: 12px;
+    color: #555;
+}
+
+.photo-card-meta-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.photo-card-name {
+    font-weight: bold;
+}
+
+.photo-card-date {
+    color: #777;
+}
+
+.photo-card-rating {
+    font-weight: bold;
+    color: #ff9800;
+    /* or your desired color for rating */
+}
