@@ -5,5 +5,8 @@ urlpatterns = [
     path('AboutUs',index1),
     path('Contact',index1),
     path('Pricing',index1),
+    path('ReviewPage',index1),
+    path('RatingPage',index1),
+    path('ChatForum',index1),
     path('Profile',index1)
 ]

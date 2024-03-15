@@ -1,11 +1,11 @@
 import React from 'react';
 import Footer from "./Footer.jsx";
-import '../styles/reviewpage.css'; // Import CSS file
+import '../styles/chatforum.css'; // Import CSS file
 import imagepath from "../images/car.jpeg";
 
-// Sample comments data
-const comments = [
-  //  sample comments data 
+// Sample user messages data
+const userMessages = [
+  // sample messages data 
   {
     id: 1,
     user: {
@@ -89,31 +89,29 @@ const comments = [
   },
 ];
 
-const ReviewPage = () => {
+const SnapTalksPage = () => {
   return (
-    <div className="review-page"style={{ backgroundImage: `url(${imagepath})`,  backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="snap-talks-page"style={{ backgroundImage: `url(${imagepath})`,  backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      {/* Header */}
       <header>
-        <h1>Reviews</h1>
+        <h1>Snap Talks</h1>
       </header>
-
-      {/* Reviews */}
-      <div className="review-container">
-        <div className="comment-list">
-          {/* List of comments */}
-          {comments.map((comment) => (
-            <div key={comment.id} className="comment-item">
-              <img src={comment.user.imageUrl} alt={comment.user.name} />
-              <div>
-                <h3>{comment.user.name}</h3>
-                <p>{comment.text}</p>
-              </div>
+  
+      {/* Main content */}
+      <div className="message-container">
+        {userMessages.map((msg) => (
+          <div key={msg.id} className="message-item">
+            <img src={msg.user.imageUrl} alt={msg.user.name} />
+            <div>
+              <div className="user-name">{msg.user.name}</div>
+              <div className="message-text">{msg.text}</div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
       <Footer />
     </div>
   );
 };
 
-export default ReviewPage;
+export default SnapTalksPage;

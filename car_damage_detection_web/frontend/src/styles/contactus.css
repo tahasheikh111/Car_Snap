@@ -1,0 +1,62 @@
+.contact-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: rgba(248, 249, 250, 0.5); /* Background color with opacity */
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+  background-blend-mode: overlay; /* Blend mode for the background image */
+}
+
+.contact-page header {
+  background-color: rgba(255, 255, 255, 0.8); /* Use rgba to add opacity */
+  color: black;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+.contact-page header h1 {
+  font-size: 80px;
+  font-weight: 900;
+  width: 100%;
+  text-align: center;
+  margin: 0%;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  padding: 20px;
+  
+}
+
+.social-media-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.social-media-item .icon {
+  margin-right: 10px;
+}
+
+.social-media-item button {
+  background-color: transparent;
+  color: black;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}

@@ -1,0 +1,73 @@
+.rating-page {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  background-image: url('../images/car.jpeg'); /* Path to your image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Fixed background */
+}
+
+.rating-page header {
+  background-color: rgba(255, 255, 255, 0.8); /* Use rgba to add opacity */
+  color: black;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Rest of your CSS styles remain the same */
+
+.rating-page header h1 {
+  font-size: 80px;
+  font-weight: 900;
+  width: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+.rating-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.rating-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.rating-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 30px;
+}
+
+.rating-stars {
+  color: gold;
+  align-items: center;
+  padding: 30px;
+}
+.nonrating-stars {
+  color: rgb(16, 16, 16);
+  align-items: center;
+  padding: 30px;
+}

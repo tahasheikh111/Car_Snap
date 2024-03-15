@@ -9,10 +9,10 @@ const Footer = () => {
         <Link to="/" className="footer-link"><button>Home</button></Link>
         <Link to="/Contact" className="footer-link"><button>Contact Us</button></Link>
         <Link to="/AboutUs" className="footer-link"><button>About Us</button></Link>
-        <Link to="/Pricing" className="footer-link"><button>Chat Forum</button></Link>
+        <Link to="/ChatForum" className="footer-link"><button>Chat Forum</button></Link>
         <Link to="/ReviewPage" className="footer-link"><button>Review</button></Link>
         <Link to="/RatingPage" className="footer-link"><button>Rating</button></Link>
-        <Link to="/Home" className="footer-link"><button>CarSnap</button></Link>
+        <Link to="/" className="footer-link"><button>CarSnap</button></Link>
       </div>
       <div className="subscribe-section">
         <p>Latest updates<br />to your inbox</p>
