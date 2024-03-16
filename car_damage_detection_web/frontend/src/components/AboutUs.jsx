@@ -4,9 +4,7 @@ import Intro from "./Intro.jsx";
 import "../styles/aboutus.css";
 import imagepath from "../images/car.jpeg";
 
-import dev2 from "../images/rameez.png";
-import dev3 from "../images/mousa.png";
-import dev4 from "../images/taha.png";
+import Developers from "./Developers.jsx";
 
 export default class AboutUs extends Component {
     constructor(props) {
@@ -51,25 +49,7 @@ export default class AboutUs extends Component {
                         <p>We invite you to experience the transformative power of Car Damage Classification. Your feedback is invaluable as it contributes to the ongoing enhancement of our system. Rate and review our project to share your insights and help us refine this revolutionary solution. Your input fuels our commitment to delivering excellence in automotive damage assessment, driving the industry towards a future of precision and objectivity.</p>
                     </div>
                 </div>
-                <div className="developers-container">
-                    <h2 className="developers-heading">Developers</h2><br />
-                    <div className="developer-card">
-                        <img src={dev4} alt="Developer 1" />
-                        <p>Muhammad Abdullah Naeem</p>
-                    </div>
-                    <div className="developer-card">
-                        <img src={dev2} alt="Developer 2" />
-                        <p>Rameez</p>
-                    </div>
-                    <div className="developer-card">
-                        <img src={dev3} alt="Developer 3" />
-                        <p>Mousa Baig</p>
-                    </div>
-                    <div className="developer-card">
-                        <img src={dev4} alt="Developer 4" />
-                        <p>Taha Sheikh</p>
-                    </div>
-                </div>
+                <Developers/>
             </>
         );
     }
