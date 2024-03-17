@@ -18,6 +18,11 @@
     font-size: 24px;
 }
 
+.id {
+    font-size: 16px;
+    color: #666;
+}
+
 .top-right {
     float: right;
 }
@@ -65,4 +70,94 @@
 .logout-btn:hover {
     background-color: #818487;
     /* Darker background color on hover */
+}
+
+.top-bar-profile {
+    display: flex;
+    padding: 30px 10px;
+    align-items: center;
+}
+
+.top-left-photo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.top-right-name {
+    font-size: 50%;
+}
+
+.profile-photo {
+    width: 100%;
+    max-width: 200px;
+    /* Set a maximum width for the image */
+    height: auto;
+    border-radius: 50%;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.desc {
+    font-size: 16px;
+}
+
+.photo-divider {
+    border: none;
+    height: 1px;
+    width: 80%;
+    /* Adjust the width of the line as needed */
+    background-color: #000;
+    /* Adjust the color of the line as needed */
+    margin-top: 20px;
+    /* Adjust the spacing between the photo and the line as needed */
+}
+
+.user-info {
+    text-align: center;
+    margin-top: 20px;
+    /* Adjust spacing between line and text/icons */
+}
+
+.social-icons {
+    color: #000;
+    display: flex;
+}
+
+.social-icons a {
+    margin: 0 10px;
+    /* Adjust spacing between icons */
+    color: #060505;
+    /* Adjust color of icons */
+    font-size: 12px;
+    /* Adjust size of icons */
+}
+
+.my-btn {
+    font-size: 10px;
+}
+
+@media only screen and (max-width: 650px) {
+    .top-bar-profile {
+        flex-direction: column;
+    }
+    .top-left-photo,
+    .top-right-name {
+        width: 100%;
+    }
+    .top-right-name {
+        text-align: center;
+        margin-top: 20px;
+        /* Add spacing between photo and name */
+    }
 }
