@@ -18,7 +18,7 @@
 }
 
 .contact-page header h1 {
-  font-size: 80px;
+  font-size: 60px;
   font-weight: 900;
   width: 100%;
   text-align: center;
@@ -31,7 +31,16 @@
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  padding: 20px;
+  padding: 20px ;
+  .name{
+    font-size: 26px;
+    
+  }
+  .button{
+    font-size: 15px;
+    opacity: 0.8;
+    padding: 10px 180px;
+  }
   
 }
 
@@ -60,3 +69,4 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
+ 
