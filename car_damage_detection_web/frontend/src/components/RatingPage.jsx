@@ -2,6 +2,7 @@ import React from 'react';
 import Footer from "./Footer.jsx";
 import '../styles/ratingpage.css'; // Import CSS file
 import imagepath from "../images/car.jpeg";
+import BlackNav from "./BlackNav.jsx";
 
 // Sample ratings data
 const ratings = [
@@ -78,7 +79,7 @@ const RatingPage = () => {
       <header>
         <h1>Ratings</h1>
       </header>
-
+      <BlackNav />
       {/* Ratings list */}
       <div className="rating-container">
         {ratings.map((rating) => (

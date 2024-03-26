@@ -2,6 +2,7 @@ import React from 'react';
 import Footer from "./Footer.jsx";
 import '../styles/chatforum.css'; // Import CSS file
 import imagepath from "../images/car.jpeg";
+import BlackNav from "./BlackNav.jsx";
 
 // Sample user messages data
 const userMessages = [
@@ -96,7 +97,10 @@ const SnapTalksPage = () => {
       <header>
         <h1>Snap Talks</h1>
       </header>
-  
+      <div>
+      <BlackNav />
+      </div>
+     
       {/* Main content */}
       <div className="message-container">
         {userMessages.map((msg) => (

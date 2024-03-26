@@ -8,7 +8,11 @@ import ReviewPage from "./ReviewPage.jsx";
 import Navbar_home from "./Navbar_home.jsx";
 import ChatForum from "./ChatForum.jsx";
 import Upload_page from "./Upload_page.jsx";
+import loginpage from "./login.jsx";
+import signup from "./Signup.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Signup from "./Signup.jsx";
+import Login from "./login.jsx";
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -32,6 +36,8 @@ export default class HomePage extends Component {
               <Route path="/RatingPage" element={<RatingPage />} />
               <Route path="/ReviewPage" element={<ReviewPage />} />
               <Route path="/ChatForum" element={<ChatForum />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/Signup" element={<Signup/>} />
               <Route path="/UploadPage" element=
               {<Upload_page/>} />
 

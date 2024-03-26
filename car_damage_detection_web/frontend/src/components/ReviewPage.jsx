@@ -2,6 +2,7 @@ import React from 'react';
 import Footer from "./Footer.jsx";
 import '../styles/reviewpage.css'; // Import CSS file
 import imagepath from "../images/car.jpeg";
+import BlackNav from "./BlackNav.jsx";
 
 // Sample comments data
 const comments = [
@@ -95,7 +96,7 @@ const ReviewPage = () => {
       <header>
         <h1>Reviews</h1>
       </header>
-
+      <BlackNav />
       {/* Reviews */}
       <div className="review-container">
         <div className="comment-list">
