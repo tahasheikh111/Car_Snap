@@ -18,6 +18,8 @@
 
 .about-us-heading {
     color: black;
+    font-weight: 800;
+    width: 100%;
     background-color: white;
     padding: 10px;
 }

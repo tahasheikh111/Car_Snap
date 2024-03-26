@@ -3,6 +3,7 @@ import Footer from "./Footer.jsx";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaArrowRight } from 'react-icons/fa';
 import '../styles/contactus.css'; // Import the CSS file
 import imagepath from "../images/car.jpeg";
+import BlackNav from "./BlackNav.jsx";
 
 const socialMediaAccounts = [
   { name: 'Facebook' , icon: <FaFacebook size={36} color="#4267B2" />, url: 'https://www.facebook.com/yourpage' },
@@ -18,7 +19,7 @@ const ContactPage = () => {
       <header>
         <h1>Contact CarSnap</h1>
       </header>
-
+      <BlackNav />
       {/* Main content */}
       <div className="main-content">
     
