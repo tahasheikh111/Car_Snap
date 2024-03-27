@@ -1,7 +1,7 @@
 import React from 'react';
 import Footer from "./Footer.jsx";
 import '../styles/reviewpage.css'; // Import CSS file
-import imagepath from "../images/car.jpeg";
+import imagepath from "../images/dreamcar.jpg";
 import BlackNav from "./BlackNav.jsx";
 
 // Sample comments data

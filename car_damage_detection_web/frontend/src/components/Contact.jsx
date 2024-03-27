@@ -2,7 +2,7 @@ import React from 'react';
 import Footer from "./Footer.jsx";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaArrowRight } from 'react-icons/fa';
 import '../styles/contactus.css'; // Import the CSS file
-import imagepath from "../images/car.jpeg";
+import imagepath from "../images/dreamcar.jpg";
 import BlackNav from "./BlackNav.jsx";
 
 const socialMediaAccounts = [
