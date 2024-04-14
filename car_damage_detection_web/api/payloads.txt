@@ -1,0 +1,80 @@
+POST http://127.0.0.1:8000/api/users/
+{
+    "username": "TahaSheikh111",
+    "email": "tahasheikh112.ts@gmail.com",
+    "password": "12345",
+    "name": "Taha Sheikh"
+}
+
+RESPONSE
+{
+    "id": 3,
+    "password": "12345",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "TahaSheikh111",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-04-14T17:36:34.331023Z",
+    "email": "tahasheikh112.ts@gmail.com",
+    "name": "Taha Sheikh",
+    "groups": [],
+    "user_permissions": []
+}
+
+GET http://127.0.0.1:8000/api/users/4
+Response:
+{
+    "id": 4,
+    "password": "12345",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "TahaSheikh111",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-04-14T17:42:33.253590Z",
+    "email": "tahasheikh112.ts@gmail.com",
+    "name": "Taha Sheikh",
+    "groups": [],
+    "user_permissions": []
+}
+
+PUT http://127.0.0.1:8000/api/users/4/
+{
+    "username": "TahaSheikh111",
+    "email": "tahasheikh112.ts@gmail.com",
+    "name": "Taha Sheikh",
+    "password": "new_password"
+}
+Response:
+{
+    "id": 4,
+    "password": "new_password",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "TahaSheikh111",
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-04-14T17:42:33.253590Z",
+    "email": "tahasheikh112.ts@gmail.com",
+    "name": "Taha Sheikh",
+    "groups": [],
+    "user_permissions": []
+}
+
+POST http://127.0.0.1:8000/api/login/
+{
+    "email": "tahasheikh111.ts@gmail.com",
+    "password": "12345"
+}
+RESPONSE
+{
+    "message": "User authenticated successfully"
+}
+
