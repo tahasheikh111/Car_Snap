@@ -3,10 +3,12 @@ from .views import (
     user_list, user_detail, image_list, image_detail,
     feedback_list, feedback_detail, rating_list, rating_detail,
     chatforum_list, chatforum_detail, message_list, message_detail,
-    login
+    login,predict_model_1,predict_model_2
 )
 
 urlpatterns = [
+    path('predict_model_1/',predict_model_1,name='predict_model_1'),
+    path('predict_model_2/',predict_model_2,name='predict_model_2'),
     path('login/', login, name='login'),
     
     path('users/', user_list, name='user-list'),

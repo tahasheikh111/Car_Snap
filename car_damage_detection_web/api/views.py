@@ -1,12 +1,70 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+import tensorflow as tf
+import cv2
+import numpy as np
+
+
 from .models import User, Image, Feedback, Rating, ChatForum, Message
 from .serializer import (
     UserSerializer, ImageSerializer, FeedbackSerializer,
     RatingSerializer, ChatForumSerializer, MessageSerializer
 )
 
+
+model_path1 = "D:/Car_Snap/car_damage_detection_web/api/models/model1.h5"
+model1 = tf.keras.models.load_model(model_path1)
+print("MODEL1 LOADED")
+model_path2 = "D:/Car_Snap/car_damage_detection_web/api/models/model2.h5"
+model2 = tf.keras.models.load_model(model_path2)
+print("MODEL2 LOADED")
+
+@api_view(['POST'])
+def predict_model_1(request):
+    try:
+        # Read and decode image
+        uploaded_image = request.FILES.get('image')
+        nparr = np.frombuffer(uploaded_image.read(), np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        
+        # Resize the image
+        resized_img = cv2.resize(img, (256, 256))
+        
+        # Preprocess the image (normalize)
+        normalized_img = resized_img / 255.0
+        
+        # Make predictions
+        yhat = model1.predict(np.expand_dims(normalized_img, 0))
+        predicted_class = int(np.argmax(yhat))
+        
+        return Response({'predicted_class': predicted_class})
+    
+    except Exception as e:
+        return Response({'error': str(e)})
+
+@api_view(['POST'])
+def predict_model_2(request):
+    try:
+        # Read and decode image
+        uploaded_image = request.FILES.get('image')
+        nparr = np.frombuffer(uploaded_image.read(), np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        
+        # Resize the image
+        resized_img = cv2.resize(img, (256, 256))
+        
+        # Preprocess the image (normalize)
+        normalized_img = resized_img / 255.0
+        
+        # Make predictions
+        yhat = model2.predict(np.expand_dims(normalized_img, 0))
+        predicted_class = int(np.argmax(yhat))
+        
+        return Response({'predicted_class': predicted_class})
+    
+    except Exception as e:
+        return Response({'error': str(e)})
 
 def authenticate_user(email, password):
     email = email.strip()  # Trim whitespace from email
@@ -38,6 +96,9 @@ def login(request):
         else:
             # Authentication failed
             return Response({'error': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 def user_list(request):
@@ -79,6 +140,9 @@ def user_detail(request, pk):
     elif request.method == 'DELETE':
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
 
 @api_view(['GET', 'POST'])
 def image_list(request):

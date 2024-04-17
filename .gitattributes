@@ -1,0 +1,2 @@
+car_damage_detection_web/api/models/model1.h5 filter=lfs diff=lfs merge=lfs -text
+car_damage_detection_web/api/models/model2.h5 filter=lfs diff=lfs merge=lfs -text
