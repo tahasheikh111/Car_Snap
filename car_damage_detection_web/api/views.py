@@ -37,6 +37,10 @@ def predict_model_1(request):
         # Make predictions
         yhat = model1.predict(np.expand_dims(normalized_img, 0))
         predicted_class = int(np.argmax(yhat))
+        if(predicted_class==1):
+            predicted_class="Damaged"
+        else:
+            predicted_class="Not Damaged"
         
         return Response({'predicted_class': predicted_class})
     
@@ -60,6 +64,14 @@ def predict_model_2(request):
         # Make predictions
         yhat = model2.predict(np.expand_dims(normalized_img, 0))
         predicted_class = int(np.argmax(yhat))
+        if(predicted_class==0):
+            predicted_class="Bonnet Damaged"
+        elif(predicted_class==1):
+            predicted_class="Sides Damaged"
+        elif(predicted_class==2):
+            predicted_class="Trunk Damaged"
+        elif(predicted_class==3):
+            predicted_class="WindShield Damaged"
         
         return Response({'predicted_class': predicted_class})
     
