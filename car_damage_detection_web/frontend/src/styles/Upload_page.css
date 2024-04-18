@@ -1,0 +1,98 @@
+.header {
+    align-items: center;
+    display: contents;
+}
+
+[type='file'] {
+    background: unset;
+    border-color: inherit;
+    border-width: 0;
+    border-radius: 0;
+    padding: 5px;
+    font-size: unset;
+}
+
+.card {
+    width: 300px;
+    height: 400px;
+    perspective: 1000px;
+    /* Define the perspective for 3D effect */
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    /* Apply transition for smooth rotation */
+    transform-style: preserve-3d;
+    /* Ensure proper 3D rendering */
+}
+
+.card:hover .card-inner {
+    transform: rotateY(180deg);
+    /* Rotate the card on hover */
+}
+
+.card-front,
+.card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    /* Hide the backface of the card */
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    /* Initially rotate the back side */
+    background-color: #f0f0f0;
+    padding: 20px;
+    overflow: auto;
+    /* Allow scrolling if content exceeds card size */
+}
+
+.upload-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Semi-transparent white background */
+    border-radius: 10px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Add some padding */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    /* Soft shadow effect */
+    margin: 20px auto;
+    /* Center the container and add some margin */
+    max-width: 500px;
+    display: grid;
+    justify-content: center;
+    /* Limit the width to prevent it from spanning the entire screen */
+}
+
+.upload-container button {
+    background-color: #000000;
+    /* Green button background color */
+    color: white;
+    /* White text color */
+    padding: 10px 20px;
+    /* Add some padding */
+    border: none;
+    /* Remove border */
+    border-radius: 5px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Add pointer cursor on hover */
+    transition: background-color 0.3s;
+    /* Smooth transition for background color */
+}
+
+.upload-container button:hover {
+    background-color: #454b45;
+    /* Darker green color on hover */
+}
+
+@media screen and (max-width: 700px) {
+    .header {
+        display: flex;
+        align-items: center;
+    }
+}
