@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import AboutUs from "./AboutUs.jsx";
 import Contact from "./Contact.jsx";
-import Pricing from "./Pricing.jsx";
 import Profile from "./Profile.jsx";
 import RatingPage from "./RatingPage.jsx";
 import ReviewPage from "./ReviewPage.jsx";
@@ -13,13 +12,42 @@ import signup from "./Signup.jsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./Signup.jsx";
 import Login from "./login.jsx";
-
-export default class HomePage extends Component {
+import Web3 from "web3";
+export default class Home extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      web3: null,
+      isConnected: false,
+      senderAddress: "" // Add senderAddress state
+    };
+  }
+
+  componentDidMount() {
+    this.initializeWeb3();
+  }
+
+  async initializeWeb3() {
+    // Check if MetaMask is installed
+    if (window.ethereum) {
+      // Initialize Web3 with MetaMask's provider
+      const web3 = new Web3(window.ethereum);
+      try {
+        // Request user's permission to connect
+        await window.ethereum.enable();
+        const accounts = await web3.eth.getAccounts(); // Retrieve Ethereum accounts
+        const senderAddress = accounts[0]; // Take the first account as senderAddress
+        this.setState({ web3, isConnected: true,senderAddress });
+      } catch (error) {
+        console.error("User denied account access");
+      }
+    } else {
+      console.error("MetaMask not detected");
+    }
   }
 
   render() {
+    const { web3, isConnected,senderAddress } = this.state;
     return (
       <Router>
         <div>
@@ -31,15 +59,14 @@ export default class HomePage extends Component {
                                       </div>} />
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/Contact" element={<Contact />} />
-              <Route path="/Pricing" element={<Pricing />} />
               <Route path="/Profile" element={<Profile />} />
               <Route path="/RatingPage" element={<RatingPage />} />
-              <Route path="/ReviewPage" element={<ReviewPage />} />
+              <Route path="/ReviewPage" element={<ReviewPage web3={web3} senderAddress={senderAddress} />} />
               <Route path="/ChatForum" element={<ChatForum />} />
               <Route path="/login" element={<Login />} />
               <Route path="/Signup" element={<Signup/>} />
               <Route path="/UploadPage" element=
-              {<Upload_page/>} />
+              {<Upload_page web3={web3} senderAddress={senderAddress}/>} />
 
             </Routes>
           </div>

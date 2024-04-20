@@ -1,13 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import "../styles/Upload_page.css";
 import BlackNav from "./BlackNav.jsx";
 import backgroundImage from "../images/_49e4c801-00d4-4429-a534-46d5ed9e0d5f.jpeg"; // Import your background image
+import ImageStorageArtifact from "../../../Blockchain/build/contracts/ImageStorage.json";
+import ReviewStorageArtifact from "../../../Blockchain/build/contracts/ReviewStorage.json"
 import Fotter from './Footer.jsx';
+import TruffleContract from '@truffle/contract'; // Adjust the import path
 
-const Upload_page = () => {
+const Upload_page = ({web3,senderAddress}) => {
+
     const [selectedImage, setSelectedImage] = useState(null);
     const [result, setResult] = useState("");
     const [file,setFile]=useState("");
+    const [imageStorageInstance, setImageStorageInstance] = useState(null);
+    const [reviewStorageInstance, setReviewStorageInstance]=useState(null);
+    const [reviewText, setReviewText] = useState("");
+    const [imageHash,setImageHash]=useState("");
+    // Initialize the contract instance
+    const initializeContract = async () => {
+      try {
+        console.log(web3); // Print web3 instance
+        console.log(senderAddress);
+        console.log("ENTER INTO INITIALIZE CONTRACT");
+        const imageStorageContract = TruffleContract(ImageStorageArtifact);
+        const reviewStorageContract=TruffleContract(ReviewStorageArtifact);
+        imageStorageContract.setProvider(web3.currentProvider);
+        reviewStorageContract.setProvider(web3.currentProvider);
+        const instance = await imageStorageContract.deployed();
+        const instance2 = await reviewStorageContract.deployed();
+        setReviewStorageInstance(instance2);
+        setImageStorageInstance(instance);
+      } catch (error) {
+        console.error("Error initializing contract:", error);
+      }
+    };
+    const hashImage = async (buffer) => {
+        // Create a SHA-256 hash object
+        const hash = await crypto.subtle.digest('SHA-256', buffer);
+      
+        // Convert the hash to a hexadecimal string
+        const hashArray = Array.from(new Uint8Array(hash));           
+        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+      
+        return hashHex;
+    };
+    
+    const handleReviewChange = (event) => {
+        setReviewText(event.target.value);
+    };
+
+    const handleSubmitReview = async () => {
+        // Handle review submission
+        console.log('Submitting review:', reviewText);
+        const result = await reviewStorageInstance.addReview(imageHash, reviewText,{
+            from: senderAddress // Specify sender's address
+        })
+
+        console.log('Review added:', result);
+        // Reset the review text
+        setReviewText('');
+    };
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -43,20 +95,45 @@ const Upload_page = () => {
                     const responseData2=await response2.json();
                     console.log(responseData2.predicted_class);
                     setResult(`- ${responseData2.predicted_class}`);
-
-
-
+                
                 } catch(error){
                     console.error('Error uploading image:', error);
                     // Handle error
                 }
-                // Code to execute if predicted_class is not "Not Damaged"
+                
             }
+            // Check if image and contract instance exist
+            if (!selectedImage || !imageStorageInstance) {
+                console.error("Image or contract instance not available.");
+                return;
+            }
+
+            // Read the contents of the image file
+            const reader = new FileReader();
+            reader.onload = async () => {
+                const buffer = Buffer.from(reader.result); // Convert to buffer
+                const hash = await hashImage(buffer); // Hash the buffe
+                setImageHash(hash);
+                // Call the storeImage function of the ImageStorage contract
+                console.log("Image Hashed ");
+                console.log(hash);
+                const uploadResult = await imageStorageInstance.storeImage(hash, {
+                    from: senderAddress, // Specify sender's address
+                    value: web3.utils.toWei("0.1", "ether"), // Sending ether along withe transaction
+                })
+                // Handle the upload result
+                console.log("Upload result:", uploadResult);
+            };
+            reader.readAsArrayBuffer(file);
+            
         } catch (error) {
             console.error('Error uploading image:', error);
             // Handle error
         }
     };
+    useEffect(() => {
+        initializeContract();
+    }, []);
 
     return (
         <>
@@ -83,6 +160,20 @@ const Upload_page = () => {
                                 </div>
                                 <div className="card-back">
                                     <p>Result: {result}</p>
+                                    {result && (
+                                        <div>
+                                            <h2>Write a Review</h2>
+                                            <textarea
+                                                rows="5"
+                                                cols="50"
+                                                value={reviewText}
+                                                onChange={handleReviewChange}
+                                                placeholder="Write your review here..."
+                                            ></textarea>
+                                            <br />
+                                            <button onClick={handleSubmitReview}>Submit Review</button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

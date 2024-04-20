@@ -41,6 +41,24 @@ This project aims to create a web application that can detect car damage using i
    ```bash
    npm run dev
    ```
+7. **Now set up the blockchain part:**
+    - **Open a program called Ganache:** It helps make a pretend blockchain.
+    - **Connect MetaMask:** MetaMask is like a wallet for the pretend money. Connect it to Ganache.
+    - **Change the Owner:** Find the file `car_damage_detection_web\Blockchain\migrations\2_ImageStorage_migrations.js` and follow the instructions to set the owner account.
+    - **Open a new window for blockchain tasks:** Open a new window.
+    - **Go to the blockchain folder:** Type:
+      ```bash
+      cd car_damage_detection_web\Blockchain
+      ```
+    - **Compile the blockchain stuff:** Type:
+      ```bash
+      truffle compile
+      ```
+    - **Migrate the blockchain stuff:** Type:
+      ```bash
+      truffle migrate
+      ```
+
 
 ## Project Structure
 
@@ -57,7 +75,23 @@ Initialize the frontend with `npm init -y` in the `frontend` folder to create a 
 
 **Django**: A high-level Python web framework that provides a robust foundation for building complex web applications. Django offers features like an object-relational mapper (ORM) for database interactions, a templating system for dynamic content generation, and a built-in admin interface for managing data.
 
+
+## Blockchain
+front end communicate with smart contracts
+enure that ganache is open in your system and metamask is connect with it because we are using fake ether
+then run these commands
+
+1. Truffle framework is used as first fo truffle compile 
+then do truffle migrate
+2. MetaMask extension is used for interacting be 
+firstly for connection with metamask i added code in Home.jsx component
+and pass the props to the upload_page module
+add the address in which you want to make the owner
+in car_damage_detection_web\Blockchain\migrations\2_ImageStorage_migrations.js
+
+
 ## Frontend
+
 
 **React**: A JavaScript library for building user interfaces. React's component-based architecture promotes the creation of reusable and modular UI elements, leading to cleaner, more maintainable code. React leverages a virtual DOM to optimize rendering performance and efficiently update the UI when data changes.
 
