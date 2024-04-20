@@ -27,8 +27,20 @@
     "dependencies": {
         "@babel/plugin-transform-class-properties": "^7.23.3",
         "@material-ui/icons": "^4.11.3",
+        "@truffle/contract": "^4.6.31",
+        "assert": "^2.1.0",
+        "buffer": "^6.0.3",
+        "crypto-browserify": "^3.12.0",
         "flowbite": "^2.3.0",
+        "node-polyfill-webpack-plugin": "^3.0.0",
+        "os-browserify": "^0.3.0",
+        "path-browserify": "^1.0.1",
+        "process": "^0.11.10",
         "react-icons": "^5.0.1",
-        "react-router-dom": "^6.22.3"
+        "react-router-dom": "^6.22.3",
+        "stream-browserify": "^3.0.0",
+        "url": "^0.11.3",
+        "vm-browserify": "^1.1.2",
+        "web3": "^4.8.0"
     }
 }

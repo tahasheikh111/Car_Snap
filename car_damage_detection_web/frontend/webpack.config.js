@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
     entry: "./src/index.js",
@@ -29,6 +30,10 @@ module.exports = {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
                 use: ['file-loader'],
             },
+            {
+                test: /\.sol$/,
+                use: "truffle-solidity-loader",
+            },
         ],
     },
     optimization: {
@@ -36,9 +41,23 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
             "process.env": {
                 NODE_ENV: JSON.stringify("production"),
+
             },
         }),
+        new NodePolyfillPlugin()
     ],
+    // resolve: {
+    //     fallback: {
+    //         crypto: require.resolve('crypto-browserify'),
+    //         os: require.resolve('os-browserify/browser'),
+    //         stream: require.resolve('stream-browserify'),
+    //         assert: require.resolve('assert/'),
+    //         vm: require.resolve("vm-browserify"),
+    //         path: require.resolve("path-browserify"),
+    //         url: require.resolve("url/")
+    //     }
+    // }
 };
