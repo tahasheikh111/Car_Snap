@@ -103,3 +103,4 @@ in car_damage_detection_web\Blockchain\migrations\2_ImageStorage_migrations.js
 
 **React Router**: A library for client-side routing that helps manage navigation within your React application. React Router enables you to define routes that map URLs to specific React components, creating an intuitive single-page application (SPA) experience without full page reloads.
 
+path "D:/Car_Snap/car_damage_detection_web/api/models/model1.h5"
