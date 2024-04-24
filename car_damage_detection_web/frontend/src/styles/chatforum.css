@@ -1,69 +1,182 @@
 .snap-talks-page {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100vw;
-  background-image: url('../images/car.jpeg'); /* Path to your image */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed; /* Fixed background */
-  
-  }
-  
-  .snap-talks-page header {
-    background-color: rgba(255, 255, 255, 0.8); /* Use rgba to add opacity */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100vw;
+    background-image: url('../images/car.jpeg');
+    /* Path to your image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /* Fixed background */
+}
+
+.snap-talks-page header {
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Use rgba to add opacity */
     color: black;
     padding: 20px;
     width: 100%;
     text-align: center;
-  }
-  
-  .snap-talks-page header h1 {
+}
+
+.snap-talks-page header h1 {
     font-size: 60px;
     font-weight: 800;
     width: 100%;
     text-align: center;
     margin: 0%;
-  }
-  .message-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+}
+
+
+/* .message-container {
+    padding: 80px;
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.5);
-  }
-  
-  
-  .message-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+}
+
+.message-item {
+    margin-bottom: 30px;
     padding: 10px;
-    border-radius: 5px;
-    background-color: #fff;
+    border-radius: 25px;
+    background-color: #ffffff57;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
-  }
-  
-  .message-item img {
+    max-width: max-content;
+}
+
+.message-item img {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     margin-right: 10px;
-  }
-  
-  .user-name {
+} */
+
+.user-name {
     font-weight: bold;
-  }
-  
-  .message-text {
+}
+
+.message-text {
     margin-top: 5px;
-  }
-  
+}
+
+
+/* CSS for SnapTalksPage component */
+
+.snap-talks-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Ensure the page takes at least the full height of the viewport */
+}
+
+
+/* Header styles */
+
+header {
+    text-align: center;
+    padding: 20px 0;
+    color: white;
+}
+
+
+/* Main content container */
+
+.message-container {
+    flex: 1;
+    /* Allow the message container to expand and fill the available space */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* Enable vertical scrolling for overflow */
+    padding: 20px;
+}
+
+
+/* Message item styles */
+
+.message-item {
+    margin-bottom: 20px;
+    max-width: 70%;
+    /* Limit the width of the message items */
+}
+
+
+/* Styles for the sender's messages (shown on the left side) */
+
+.message-item.sent {
+    align-self: flex-start;
+    /* Align the sender's messages to the left side */
+    background-color: #DCF8C6;
+    /* Example background color for sender's messages */
+    border-radius: 10px;
+    padding: 10px;
+}
+
+
+/* Styles for the received messages (shown on the right side) */
+
+.message-item.received {
+    align-self: flex-end;
+    /* Align received messages to the right side */
+    background-color: #E8E8E8;
+    /* Example background color for received messages */
+    border-radius: 10px;
+    padding: 10px;
+}
+
+
+/* Input container styles */
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    /* Spread the input and button horizontally */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    /* Example background color for input container */
+}
+
+
+/* Input field styles */
+
+.input-container input[type="text"] {
+    flex: 1;
+    /* Allow the input field to expand and fill available space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+
+/* Button styles */
+
+.input-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    /* Example button background color */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.input-container button:hover {
+    background-color: #0056b3;
+    /* Example hover background color */
+}
+
+
+/* Footer styles */
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    color: white;
+}
