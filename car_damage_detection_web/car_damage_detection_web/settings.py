@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'rest_framework',
-    'frontend.apps.FrontendConfig'
+    'frontend.apps.FrontendConfig',
+    'channels',
+    
 ]
 
 MIDDLEWARE = [
@@ -71,7 +74,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'car_damage_detection_web.wsgi.application'
-
+ASGI_APPLICATION = 'car_damage_detection_web.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -124,3 +127,19 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CHANNEL_LAYERS = {
+    'default':{
+        "BACKEND":"channels.layers.InMemoryChannelLayer"
+    }
+}
+
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
+from api.consumers import TextRoomConsumer
+application = ProtocolTypeRouter({
+    "websocket": URLRouter([
+        path('ws/chat/', TextRoomConsumer.as_asgi()),
+    ]),
+}
+)
