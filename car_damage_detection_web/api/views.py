@@ -14,8 +14,10 @@ from .serializer import (
 
 
 model_path1 = "D:/Car_Snap/car_damage_detection_web/api/models/model1.h5"
+# C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model1.h5
 model1 = tf.keras.models.load_model(model_path1)
 print("MODEL1 LOADED")
+# model_path2 = "C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model2.h5"
 model_path2 = "D:/Car_Snap/car_damage_detection_web/api/models/model2.h5"
 model2 = tf.keras.models.load_model(model_path2)
 print("MODEL2 LOADED")
