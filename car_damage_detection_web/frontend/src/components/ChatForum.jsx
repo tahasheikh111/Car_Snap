@@ -52,7 +52,7 @@ const SnapTalksPage = ({ senderAddress }) => {
     return (
         <div className="snap-talks-page" style={{ backgroundImage: `url(${imagepath})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <header>
-                <h1>Snap Talks</h1>
+                <h1>SNAP-TALKS</h1>
             </header>
             <div>
                 <BlackNav />

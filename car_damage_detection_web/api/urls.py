@@ -3,7 +3,7 @@ from .views import (
     user_list, user_detail, image_list, image_detail,
     feedback_list, feedback_detail, rating_list, rating_detail,
     chatforum_list, chatforum_detail, message_list, message_detail,
-    login,predict_model_1,predict_model_2
+    login,predict_model_1,predict_model_2, chat_view
 )
 
 urlpatterns = [
@@ -28,4 +28,7 @@ urlpatterns = [
 
     path('messages/', message_list, name='message-list'),
     path('messages/<int:pk>/', message_detail, name='message-detail'),
+
+    path('chat/', chat_view, name='chat_view'),
+
 ]
