@@ -1,31 +1,136 @@
 import os
 #from gemini import Conversation
 from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404, render
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework import status
 import tensorflow as tf
 import cv2
 import numpy as np
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import requests
-import json
-import google.generativeai as genai
+from django.views.generic import View
+from django.contrib.auth.models import User
+import hashlib
 
 
-from .models import User, Image, Feedback, Rating, ChatForum, Message
+
+
+from .models import User, Image, Feedback, Rating, ChatForum, Message,ImagePost,UserProfile
 from .serializer import (
     UserSerializer, ImageSerializer, FeedbackSerializer,
-    RatingSerializer, ChatForumSerializer, MessageSerializer
+    RatingSerializer, ChatForumSerializer, MessageSerializer,ImagePostSerializer,UserProfileSerializer
 )
 
 
-model_path1 = "D:/Car_Snap/car_damage_detection_web/api/models/model1.h5"
-# C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model1.h5
+@api_view(['POST'])
+def image_post_create(request):
+    if request.method == 'POST':
+        serializer = ImagePostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProfileView(View):
+    def post(self, request):
+        # Assuming you are sending data as JSON from the frontend
+        data = request.POST
+
+        # Retrieve or create the associated user
+        username = data.get('username')
+        user, created = User.objects.get_or_create(username=username)
+
+        # Generate hash value for the user
+        user_details = f"{user.username}{data.get('name', '')}{data.get('description', '')}{data.get('linkedin', '')}{data.get('instagram', '')}"
+        user_hash = hashlib.sha256(user_details.encode()).hexdigest()
+
+        # Create or update the user profile
+        profile_data = {
+            'user': user,
+            'hash_value': user_hash,
+            'name': data.get('name', ''),
+            'description': data.get('description', ''),
+            'linkedin': data.get('linkedin', ''),
+            'instagram': data.get('instagram', '')
+            # Assuming photo is handled separately, like through a file upload
+        }
+
+        # Check if the profile already exists
+        try:
+            profile = UserProfile.objects.get(hash_value=user_hash)
+            for key, value in profile_data.items():
+                setattr(profile, key, value)
+        except UserProfile.DoesNotExist:
+            profile = UserProfile(**profile_data)
+
+        # Save the profile
+        profile.save()
+
+        return JsonResponse({'status': 'success'})
+
+
+
+
+
+
+
+# return all info about the user when hash is given 
+
+def user_info_view(request, user_hash):  
+    # Retrieve the user profile based on the provided hash
+    user_profile = get_object_or_404(UserProfile, hash_value=user_hash)
+
+    # Construct a dictionary containing user information
+    user_info = {
+        'username': user_profile.user.username,
+        'name': user_profile.name,
+        'description': user_profile.description,
+        'linkedin': user_profile.linkedin,
+        'instagram': user_profile.instagram,
+        'photo_url': user_profile.photo.url if user_profile.photo else None
+    }
+
+    # Return user information as JSON response
+    return JsonResponse(user_info)
+
+
+
+
+# return all info about the image when hash is given 
+
+def image_info_view(request, image_hash):
+    # Retrieve the image post based on the provided hash
+    image_post = get_object_or_404(ImagePost, hash_value=image_hash)
+
+    # Construct a dictionary containing image information
+    image_info = {
+        'user': image_post.user.username,
+        'image_url': image_post.image.url,
+        'upload_date': image_post.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        # Add more fields as needed
+    }
+
+    # Return image information as JSON response
+    return JsonResponse(image_info)
+
+
+
+# return  the image when hash is given 
+def image_post_view(request, image_hash):
+    # Retrieve the image post based on the provided hash
+    image_post = get_object_or_404(ImagePost, hash_value=image_hash)
+
+    context = {
+        'image_post': image_post,
+    }
+
+    return render(request, 'image_post.html', context)
+
+
+model_path1 = "C:/Users/AH/OneDrive/Desktop/GitHub/Car_Snap/car_damage_detection_web/api/models/model1.h5"
 model1 = tf.keras.models.load_model(model_path1)
 print("MODEL1 LOADED")
-# model_path2 = "C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model2.h5"
-model_path2 = "D:/Car_Snap/car_damage_detection_web/api/models/model2.h5"
+model_path2 = "C:/Users/AH/OneDrive/Desktop/GitHub/Car_Snap/car_damage_detection_web/api/models/model2.h5"
 model2 = tf.keras.models.load_model(model_path2)
 print("MODEL2 LOADED")
 

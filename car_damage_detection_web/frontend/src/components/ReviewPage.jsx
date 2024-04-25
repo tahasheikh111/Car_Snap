@@ -73,6 +73,7 @@ const ReviewPage = ({web3,senderAddress}) => {
                 <div>
                   <h3>Image Hash: {review.imageHash}</h3>
                   <p>Review: {review.reviewText}</p>
+                  <p>Review: {review.rating}</p>
                 </div>
               </div>
             ))}
