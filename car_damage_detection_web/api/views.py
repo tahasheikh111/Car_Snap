@@ -345,10 +345,6 @@ def message_detail(request, pk):
 
     
 
-# Gemini_API_KEY = 'AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU'
-# # Initialize Gemini API client with your API key and secret key
-# gemini_client = GeminiAPIClient(api_key='your_api_key', secret_key='your_secret_key')
-
 # Set up your API key
 os.environ['GOOGLE_API_KEY'] = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
 api_KEY = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
@@ -397,31 +393,3 @@ def chat_view(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
-
-## Set up the Gemini API key
-
-# genai.configure(api_key="AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU")
-
-# # Initialize the Gemini model
-# model = genai.GenerativeModel(model_name='gemini-1.5-pro-latest',
-#                                system_instruction="""You are a friendly AI assistant.
-#                                                     You are to answer only cars related topics and questions.
-#                                                     Provide clear and straightforward clarifications and answers to questions.
-#                                                     If you don't have information on the subject matter kindly make it known.
-#                                                     If questions outside cars are asked, let the user know that you are
-#                                                     an assistant for cars related topics.""")
-
-# @csrf_exempt
-# def chat_view(request):
-#     if request.method == "POST":
-#         text = request.POST.get("text")
-#         chat = model.start_chat()
-#         response = chat.send_message(text)
-#         user = request.user
-#         ChatBot.objects.create(text_input=text, gemini_output=response.text, user=user)
-#         # Extract necessary data from response
-#         response_data = {
-#             "text": response.text,  # Assuming response.text contains the relevant response data
-#             # Add other relevant data from response if needed
-#         }
-#         return JsonResponse({"data": response_data})
