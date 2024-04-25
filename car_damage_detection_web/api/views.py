@@ -1,9 +1,16 @@
+import os
+#from gemini import Conversation
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 import tensorflow as tf
 import cv2
 import numpy as np
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import requests
+import json
+import google.generativeai as genai
 
 
 from .models import User, Image, Feedback, Rating, ChatForum, Message
@@ -13,10 +20,10 @@ from .serializer import (
 )
 
 
-model_path1 = "D:/Car_Snap/car_damage_detection_web/api/models/model1.h5"
+model_path1 = "C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model1.h5"
 model1 = tf.keras.models.load_model(model_path1)
 print("MODEL1 LOADED")
-model_path2 = "D:/Car_Snap/car_damage_detection_web/api/models/model2.h5"
+model_path2 = "C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model2.h5"
 model2 = tf.keras.models.load_model(model_path2)
 print("MODEL2 LOADED")
 
@@ -337,3 +344,84 @@ def message_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
+
+# Gemini_API_KEY = 'AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU'
+# # Initialize Gemini API client with your API key and secret key
+# gemini_client = GeminiAPIClient(api_key='your_api_key', secret_key='your_secret_key')
+
+# Set up your API key
+os.environ['GOOGLE_API_KEY'] = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
+api_KEY = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
+
+
+@csrf_exempt
+def chat_view(request):
+    if request.method == 'POST':
+        try:
+            # Extract the message from the request data
+            data = json.loads(request.body)
+            contents = data.get('contents')
+            print("Received payload:", data)  # Debugging statement
+
+            if contents and isinstance(contents, list) and len(contents) > 0:
+                user_message = contents[0]['parts'][0]['text']
+                print("User message:", user_message)  # Debugging statement
+
+                # Set up the generative AI model
+                genai.configure(api_key=os.environ['GOOGLE_API_KEY'])
+                model = genai.GenerativeModel(model_name='gemini-1.5-pro-latest',
+                               system_instruction="""You are a friendly AI assistant.
+                                                    You are to answer only cars related topics and questions.
+                                                    Provide clear and straightforward clarifications and answers to questions.
+                                                    If you don't have information on the subject matter kindly make it known.
+                                                    If questions outside cars are asked, let the user know that you are
+                                                    an assistant for cars related topics.""")
+
+                # Generate content based on the user message
+                response = model.generate_content(user_message)
+                generated_content = response.text
+
+                # Return the generated content as bot response
+                print("Generated content:", generated_content)  # Debugging statement
+                return JsonResponse({'message': generated_content})
+
+            else:
+                return JsonResponse({'error': 'Invalid request payload'}, status=400)
+
+        except Exception as e:
+            # Return error message if any exception occurs
+            return JsonResponse({'error': str(e)}, status=500)
+
+    else:
+        # Return error if the request method is not allowed
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+
+## Set up the Gemini API key
+
+# genai.configure(api_key="AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU")
+
+# # Initialize the Gemini model
+# model = genai.GenerativeModel(model_name='gemini-1.5-pro-latest',
+#                                system_instruction="""You are a friendly AI assistant.
+#                                                     You are to answer only cars related topics and questions.
+#                                                     Provide clear and straightforward clarifications and answers to questions.
+#                                                     If you don't have information on the subject matter kindly make it known.
+#                                                     If questions outside cars are asked, let the user know that you are
+#                                                     an assistant for cars related topics.""")
+
+# @csrf_exempt
+# def chat_view(request):
+#     if request.method == "POST":
+#         text = request.POST.get("text")
+#         chat = model.start_chat()
+#         response = chat.send_message(text)
+#         user = request.user
+#         ChatBot.objects.create(text_input=text, gemini_output=response.text, user=user)
+#         # Extract necessary data from response
+#         response_data = {
+#             "text": response.text,  # Assuming response.text contains the relevant response data
+#             # Add other relevant data from response if needed
+#         }
+#         return JsonResponse({"data": response_data})
