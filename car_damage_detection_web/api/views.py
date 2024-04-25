@@ -457,7 +457,6 @@ os.environ['GOOGLE_API_KEY'] = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
 api_KEY = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
 
 
-@csrf_exempt
 def chat_view(request):
     if request.method == 'POST':
         try:
