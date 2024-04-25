@@ -3,7 +3,8 @@ from .views import (
     user_list, user_detail, image_list, image_detail,
     feedback_list, feedback_detail, rating_list, rating_detail,
     chatforum_list, chatforum_detail, message_list, message_detail,
-    login,predict_model_1,predict_model_2
+    login,predict_model_1,predict_model_2,user_info_view, image_info_view, image_post_view,image_post_create,
+    UserProfileView,
 )
 
 urlpatterns = [
@@ -28,4 +29,18 @@ urlpatterns = [
 
     path('messages/', message_list, name='message-list'),
     path('messages/<int:pk>/', message_detail, name='message-detail'),
+
+
+    path('api/user/profile/', UserProfileView.as_view(), name='user-profile'),
+
+    # URL for retrieving user information by hash
+    path('api/user/info/<str:user_hash>/', user_info_view, name='user-info'),
+
+    # URL for retrieving image information by hash
+    path('api/image/info/<str:image_hash>/', image_info_view, name='image-info'),
+
+    # URL for rendering the image post by hash
+    path('image/post/<str:image_hash>/', image_post_view, name='image-post'),
+
+     path('api/imagepost/', image_post_create, name='image-post-create'),
 ]
