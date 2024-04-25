@@ -1,3 +1,5 @@
+import os
+#from gemini import Conversation
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404, render
 from rest_framework.response import Response
@@ -449,3 +451,52 @@ def message_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
+
+# Set up your API key
+os.environ['GOOGLE_API_KEY'] = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
+api_KEY = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
+
+
+@csrf_exempt
+def chat_view(request):
+    if request.method == 'POST':
+        try:
+            # Extract the message from the request data
+            data = json.loads(request.body)
+            contents = data.get('contents')
+            print("Received payload:", data)  # Debugging statement
+
+            if contents and isinstance(contents, list) and len(contents) > 0:
+                user_message = contents[0]['parts'][0]['text']
+                print("User message:", user_message)  # Debugging statement
+
+                # Set up the generative AI model
+                genai.configure(api_key=os.environ['GOOGLE_API_KEY'])
+                model = genai.GenerativeModel(model_name='gemini-1.5-pro-latest',
+                               system_instruction="""You are a friendly AI assistant.
+                                                    You are to answer only cars related topics and questions.
+                                                    Provide clear and straightforward clarifications and answers to questions.
+                                                    If you don't have information on the subject matter kindly make it known.
+                                                    If questions outside cars are asked, let the user know that you are
+                                                    an assistant for cars related topics.""")
+
+                # Generate content based on the user message
+                response = model.generate_content(user_message)
+                generated_content = response.text
+
+                # Return the generated content as bot response
+                print("Generated content:", generated_content)  # Debugging statement
+                return JsonResponse({'message': generated_content})
+
+            else:
+                return JsonResponse({'error': 'Invalid request payload'}, status=400)
+
+        except Exception as e:
+            # Return error message if any exception occurs
+            return JsonResponse({'error': str(e)}, status=500)
+
+    else:
+        # Return error if the request method is not allowed
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+

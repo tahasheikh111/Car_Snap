@@ -62,7 +62,7 @@ export default class Home extends Component {
               <Route path="/Profile" element={<Profile />} />
               <Route path="/RatingPage" element={<RatingPage />} />
               <Route path="/ReviewPage" element={<ReviewPage web3={web3} senderAddress={senderAddress} />} />
-              <Route path="/ChatForum" element={<ChatForum />} />
+              <Route path="/ChatForum" element={<ChatForum senderAddress={senderAddress}/>} />
               <Route path="/login" element={<Login />} />
               <Route path="/Signup" element={<Signup/>} />
               <Route path="/UploadPage" element=
