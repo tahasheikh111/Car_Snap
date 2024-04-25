@@ -58,7 +58,7 @@ const ContactPage = () => {
   return (
     <div className="contact-page" style={{ backgroundImage: `url(${imagepath})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       <header>
-        <h1>Contact CarSnap</h1>
+        <h1>CONTACT US</h1>
       </header>
       <BlackNav />
       {/* Main content */}
@@ -88,7 +88,7 @@ const ContactPage = () => {
         </div>
         <input
           type="text"
-          placeholder="Type your message..."
+          placeholder="Customer Support: Feel Free to Ask..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyPress={(e) => { if (e.key === 'Enter') { handleUserInput() }}}
