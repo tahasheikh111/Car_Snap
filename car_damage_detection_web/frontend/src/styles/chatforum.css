@@ -160,7 +160,7 @@ header {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #007BFF;
+    background-color: #24404f;
     /* Example button background color */
     color: white;
     cursor: pointer;
@@ -172,11 +172,21 @@ header {
     /* Example hover background color */
 }
 
-
-/* Footer styles */
-
-footer {
-    text-align: center;
-    padding: 20px 0;
-    color: white;
+@media only screen and (max-width: 650px) {
+    .snap-talks-page {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
+        background-image: url('../images/car.jpeg');
+        /* Path to your image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        /* Fixed background */
+    }
 }
