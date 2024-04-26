@@ -31,4 +31,8 @@ urlpatterns = [
 
     path('chat/', chat_view, name='chat_view'),
 
+    path('get-users/', get_all_user_profile, name='get_user_profile'),
+    path('create-user-profiles/', create_user_profile, name='create_user_profile'),
+    path('update-user-profiles/<str:pk>/', update_user_profile, name='update_user_profile'),
+    path('set-dp/<str:pk>/', set_dp, name='set_dp'),
 ]

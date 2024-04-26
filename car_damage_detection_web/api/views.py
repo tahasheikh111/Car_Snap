@@ -20,12 +20,12 @@ from .serializer import (
 )
 
 
-model_path1 = "C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model1.h5"
+model_path1 = "api/models/model1.h5"
 model1 = tf.keras.models.load_model(model_path1)
 print("MODEL1 LOADED")
-model_path2 = "C:/Users/PC/Documents/GitHub/Car_Snap/car_damage_detection_web/api/models/model2.h5"
+model_path2 = "api/models/model2.h5"
 model2 = tf.keras.models.load_model(model_path2)
-print("MODEL2 LOADED")
+print("MODEL2 LOADED")
 
 @api_view(['POST'])
 def predict_model_1(request):
@@ -393,3 +393,105 @@ def chat_view(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
+from .serializer import (
+    UserProfileSerializer,
+)
+@api_view(['GET'])
+def get_all_user_profile(request):
+    # Retrieve all UserProfile instances from the database
+    user_profiles = UserProfile.objects.all()
+    
+    # Serialize the instances
+    serializer = UserProfileSerializer(user_profiles, many=True)
+    
+    # Return the serialized data in the response
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def create_user_profile(request):
+    # Extract the id from the request message
+    id_from_message = request.data.get('id')
+    
+    # Check if id is provided in the request
+    if not id_from_message:
+        return Response({'error': 'id is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Check if a UserProfile with the same id already exists
+    if UserProfile.objects.filter(id=id_from_message).exists():
+        return Response({'error': 'UserProfile with this id already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Create a new UserProfile instance with the id from the message
+    serializer = UserProfileSerializer(data={'id': id_from_message})
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PATCH'])
+def set_dp(request, pk):
+    try:
+        user_profile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if 'photo' not in request.data:
+        return Response({'error': 'photo is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Get the uploaded image data
+    photo_data = request.data['photo']
+
+    # Save the image file to the appropriate location (e.g., profile_photos/)
+    user_profile.photo.save(photo_data.name, photo_data, save=True)
+
+    # Update the photo field of the UserProfile instance with the path to the saved image file
+    user_profile.save()
+
+    # Serialize the updated UserProfile instance
+    serializer = UserProfileSerializer(user_profile)
+
+    # Return the serialized data in the response
+    return Response(serializer.data)
+
+
+
+
+@api_view(['PATCH'])
+def update_user_profile(request, pk):
+    try:
+        user_profile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if 'username' in request.data:
+        # Update username if provided
+        new_username = request.data['username']
+        user_profile.name = new_username
+        
+    if 'description' in request.data:
+        # Update description if provided
+        user_profile.description = request.data['description']
+
+    if 'linkedin' in request.data:
+        # Update linkedin if provided
+        user_profile.linkedin = request.data['linkedin']
+
+    if 'instagram' in request.data:
+        # Update linkedin if provided
+        user_profile.instagram = request.data['instagram']
+        
+    if 'facebook' in request.data:
+        # Update linkedin if provided
+        user_profile.facebook = request.data['facebook']
+        
+    if 'email' in request.data:
+        # Update linkedin if provided
+        user_profile.email = request.data['email']
+    # Similar checks for other fields...
+
+    serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
