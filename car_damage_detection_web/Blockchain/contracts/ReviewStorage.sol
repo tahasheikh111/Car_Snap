@@ -1,51 +1,65 @@
-pragma solidity >=0.4.22 <0.8.0;
+import React, { useState, useEffect } from 'react';
+import TruffleContract from '@truffle/contract';
+import ReviewStorageArtifact from 'path/to/ReviewStorage.json';
 
-pragma experimental ABIEncoderV2;
+const RatingPage = ({ web3 }) => {
+  const [reviewStorageInstance, setReviewStorageInstance] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
-contract ReviewStorage {
-    struct Review {
-        address userAddress;
-        string imageHash;
-        string reviewText;
-        uint8 rating; // New rating element
+  useEffect(() => {
+    const initializeContract = async () => {
+      try {
+        const reviewStorageContract = TruffleContract(ReviewStorageArtifact);
+        reviewStorageContract.setProvider(web3.currentProvider);
+        const instance = await reviewStorageContract.deployed();
+        setReviewStorageInstance(instance);
+        loadReviews(instance);
+      } catch (error) {
+        console.error('Error initializing contract:', error);
+      }
+    };
+
+    if (web3) {
+      initializeContract();
     }
+  }, [web3]);
 
-    mapping(address => Review[]) public userReviews;
-    address[] public users;
-
-    event ReviewAdded(address indexed userAddress, string imageHash, string reviewText, uint8 rating); // Update event definition
-
-    function addReview(string memory _imageHash, string memory _reviewText, uint8 _rating) public {
-        Review memory newReview = Review({
-            userAddress: msg.sender,
-            imageHash: _imageHash,
-            reviewText: _reviewText,
-            rating: _rating // Assign rating
-        });
-
-        userReviews[msg.sender].push(newReview);
-
-        if (!isUserExists(msg.sender)) {
-            users.push(msg.sender);
-        }
-
-        emit ReviewAdded(msg.sender, _imageHash, _reviewText, _rating); // Emit event with rating
+  const loadReviews = async (instance) => {
+    try {
+      const users = await instance.getAllUsers();
+      const reviewsData = await Promise.all(
+        users.map(async (user) => {
+          const userReviews = await instance.getReviewsByUser(user);
+          return {
+            userAddress: user,
+            reviews: userReviews,
+          };
+        })
+      );
+      setReviews(reviewsData);
+    } catch (error) {
+      console.error('Error loading reviews:', error);
     }
+  };
 
-    function getReviewsByUser(address _user) public view returns (Review[] memory) {
-        return userReviews[_user];
-    }
+  return (
+    <div>
+      <h1>Rating Page</h1>
+      <div>
+        {reviews.map((userData, index) => (
+          <div key={index}>
+            <h2>User Address: {userData.userAddress}</h2>
+            {userData.reviews.map((review, index) => (
+              <div key={index}>
+                <p>Review Text: {review.reviewText}</p>
+                <p>Rating: {review.rating}</p>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-    function getAllUsers() public view returns (address[] memory) {
-        return users;
-    }
-
-    function isUserExists(address _user) internal view returns (bool) {
-        for (uint256 i = 0; i < users.length; i++) {
-            if (users[i] == _user) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
+export default RatingPage;
