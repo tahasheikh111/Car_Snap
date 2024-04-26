@@ -3,7 +3,7 @@ from .views import (
     user_list, user_detail, image_list, image_detail,
     feedback_list, feedback_detail, rating_list, rating_detail,
     chatforum_list, chatforum_detail, message_list, message_detail,
-    login,predict_model_1,predict_model_2, chat_view
+    login,predict_model_1,predict_model_2, chat_view,update_user_profile, create_user_profile,get_all_user_profile,set_dp,
 )
 
 urlpatterns = [

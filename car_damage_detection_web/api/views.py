@@ -13,10 +13,10 @@ import json
 import google.generativeai as genai
 
 
-from .models import User, Image, Feedback, Rating, ChatForum, Message
+from .models import User, Image, Feedback, Rating, ChatForum, Message,UserProfile
 from .serializer import (
     UserSerializer, ImageSerializer, FeedbackSerializer,
-    RatingSerializer, ChatForumSerializer, MessageSerializer
+    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer
 )
 
 
@@ -25,7 +25,7 @@ model1 = tf.keras.models.load_model(model_path1)
 print("MODEL1 LOADED")
 model_path2 = "api/models/model2.h5"
 model2 = tf.keras.models.load_model(model_path2)
-print("MODEL2 LOADED")
+print("MODEL2 LOADED")
 
 @api_view(['POST'])
 def predict_model_1(request):
