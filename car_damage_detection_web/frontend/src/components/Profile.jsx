@@ -115,9 +115,6 @@ const Profile = ({web3, senderAddress }) => {
                     fontWeight: 'normal',
                     fontSize: '15px'
                 }}>
-                    <Link to="/previousPage">
-                        <strong>GO BACK</strong> <span className="arrow">←</span>
-                    </Link>
                 </div>
                 <div className="top-right" style={{ fontWeight: 'normal', color: 'black' }}>
                     <strong>PROFILE</strong>
@@ -200,7 +197,7 @@ const Profile = ({web3, senderAddress }) => {
                 </div>
             )}
 
-            <Uploads senderAddress={senderAddress}/>
+            <Uploads name={userData.name} senderAddress={senderAddress}/>
             <Footer />
         </div>
     );

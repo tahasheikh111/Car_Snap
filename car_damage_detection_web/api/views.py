@@ -516,3 +516,37 @@ def update_user_profile(request, pk):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+########################### FOR IMAGES
+@api_view(['POST'])
+def create_image(request):
+    serializer = ImageSerializer(data=request.data)
+    print(request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_images(request, user_address):
+    images = Image.objects.filter(owner_address=user_address)
+    serializer = ImageSerializer(images, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_image(request, id):
+    try:
+        image = Image.objects.get(id=id)
+        # Retrieve the path to the image file
+        image_path = image.photo.path
+        # Open the image file
+        with open(image_path, 'rb') as f:
+            # Read the content of the image file
+            image_data = f.read()
+        # Return the image data as an HTTP response
+        return HttpResponse(image_data, content_type='image/jpeg')  # Adjust content type if needed
+    except Image.DoesNotExist:
+        return Response({"error": "Image not found"}, status=404)

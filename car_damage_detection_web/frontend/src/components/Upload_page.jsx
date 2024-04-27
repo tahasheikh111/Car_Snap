@@ -135,18 +135,46 @@ const Upload_page = ({ web3, senderAddress }) => {
         // Call the storeImage function of the ImageStorage contract
         console.log("Image Hashed ");
         console.log(hash);
+        try {
+          const newformData = new FormData();
+          newformData.append("photo", file);
+          newformData.append("id", hash); // Append the user ID
+          newformData.append("owner_address",senderAddress)
+          console.log(newformData);
+      
+          const response = await fetch("http://127.0.0.1:8000/api/images/", {
+            method: "POST",
+            body: newformData,
+          });
+      
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log("Image uploaded successfully:", responseData);
+            // Handle further processing if needed
+          } else {
+            console.error("Failed to upload image:", response.statusText);
+            // Handle error
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          // Handle error
+        }
         const uploadResult = await imageStorageInstance.storeImage(hash, {
           from: senderAddress, // Specify sender's address
           value: web3.utils.toWei("0.1", "ether"), // Sending ether along with the transaction
         });
         // Handle the upload result
         console.log("Upload result:", uploadResult);
+
+    
       };
       reader.readAsArrayBuffer(file);
     } catch (error) {
       console.error("Error uploading image:", error);
       // Handle error
     }
+    // storing image
+    
   };
 
   useEffect(() => {

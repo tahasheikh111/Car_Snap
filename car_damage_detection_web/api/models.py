@@ -17,7 +17,12 @@ class UserProfile(models.Model):
     email = models.EmailField(blank=True, default='')
     photo = models.ImageField(upload_to='profile_photos/', blank=True)
 
-
+class Image(models.Model):
+    id=models.CharField(max_length=100,primary_key=True)
+    owner_address = models.CharField(max_length=100,default='')
+    photo = models.ImageField(upload_to='upload_images/',blank=True)
+    
+    
 class ImagePost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/')
@@ -49,11 +54,7 @@ class User(AbstractUser):
     groups = models.ManyToManyField(Group, related_name='custom_user_groups', blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions', blank=True)
 
-class Image(models.Model):
-    image_file = models.ImageField(upload_to='images/') #save into this directory
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    upload_date = models.DateTimeField(auto_now_add=True)
-    result = models.CharField(max_length=255)
+
 
 class Feedback(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
