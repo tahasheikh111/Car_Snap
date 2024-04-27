@@ -45,6 +45,26 @@ const ReviewPage = ({ web3, senderAddress }) => {
     }
   };
 
+// Function to render rating stars
+const renderRatingStars = (rating) => {
+  const stars = [];
+    // Fill complete stars
+    for (let i = 0; i < Math.floor(rating); i++) {
+      stars.push(<span key={i} style={{ color: 'gold' }}>★</span>);
+    }
+    // Fill half star if applicable
+    if (rating % 1 !== 0) {
+      stars.push(<span key={stars.length} style={{ color: 'gold' }}>½</span>);
+    }
+    // Fill remaining empty stars
+    const remainingStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < remainingStars; i++) {
+      stars.push(<span key={stars.length + i}>★</span>);
+    }
+    return stars;
+};
+
+
   return (
     <div className="review-page">
       <header>
@@ -74,6 +94,7 @@ const ReviewPage = ({ web3, senderAddress }) => {
                   />
                   <p>Review Text: {review.reviewText}</p>
                   <p>Rating: {review.rating}</p>
+                  {renderRatingStars(review.rating)}
                 </div>
               </div>
             ))}
