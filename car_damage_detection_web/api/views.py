@@ -10,6 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
 import json
+from django.http import HttpResponse
+from django.conf import settings
+
 import google.generativeai as genai
 
 
@@ -419,7 +422,7 @@ def create_user_profile(request):
     
     # Check if a UserProfile with the same id already exists
     if UserProfile.objects.filter(id=id_from_message).exists():
-        return Response({'error': 'UserProfile with this id already exists'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'UserProfile with this id already exists'}, status=status.HTTP_200_OK)
 
     # Create a new UserProfile instance with the id from the message
     serializer = UserProfileSerializer(data={'id': id_from_message})
@@ -455,8 +458,26 @@ def set_dp(request, pk):
     return Response(serializer.data)
 
 
-
-
+@api_view(['GET'])
+def get_user(request, pk):
+    try:
+        user_profile = UserProfile.objects.get(pk=pk)
+        serializer = UserProfileSerializer(user_profile)
+        return Response(serializer.data)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
+def get_user_photo(request, filename):
+    try:
+        photo_path = os.path.join(settings.MEDIA_ROOT, 'profile_photos', filename)
+        print(photo_path)
+        with open(photo_path, 'rb') as photo_file:
+            return HttpResponse(photo_file.read(), content_type='image/jpeg')
+    except FileNotFoundError:
+        return HttpResponse(status=404)
+    
+    
 @api_view(['PATCH'])
 def update_user_profile(request, pk):
     try:
@@ -495,3 +516,37 @@ def update_user_profile(request, pk):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+########################### FOR IMAGES
+@api_view(['POST'])
+def create_image(request):
+    serializer = ImageSerializer(data=request.data)
+    print(request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_images(request, user_address):
+    images = Image.objects.filter(owner_address=user_address)
+    serializer = ImageSerializer(images, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_image(request, id):
+    try:
+        image = Image.objects.get(id=id)
+        # Retrieve the path to the image file
+        image_path = image.photo.path
+        # Open the image file
+        with open(image_path, 'rb') as f:
+            # Read the content of the image file
+            image_data = f.read()
+        # Return the image data as an HTTP response
+        return HttpResponse(image_data, content_type='image/jpeg')  # Adjust content type if needed
+    except Image.DoesNotExist:
+        return Response({"error": "Image not found"}, status=404)

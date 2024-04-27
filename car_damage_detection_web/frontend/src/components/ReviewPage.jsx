@@ -33,9 +33,8 @@ const ReviewPage = ({ web3, senderAddress }) => {
       const reviewsData = await Promise.all(
         users.map(async (user) => {
           const userReviews = await instance.getReviewsByUser(user);
-          const userDetails = await fetchUserDetails(user); // Fetch user details
           return {
-            userDetails: userDetails,
+            userDetails: user,
             reviews: userReviews,
           };
         })
@@ -44,22 +43,6 @@ const ReviewPage = ({ web3, senderAddress }) => {
     } catch (error) {
       console.error("Error loading reviews:", error);
     }
-  };
-
-  // Function to fetch user details from Django API based on user ID
-  const fetchUserDetails = async (userId) => {
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/api/user_detail/${userId}`);
-      if (response.ok) {
-        const userData = await response.json();
-        return userData;
-      } else {
-        console.error('Failed to fetch user details:', response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error('Error fetching user details:', error);
-    }
-    return null;
   };
 
   return (
@@ -77,11 +60,18 @@ const ReviewPage = ({ web3, senderAddress }) => {
                 {/* Add other user details you want to display */}
               </div>
             )}
-            {reviewData.reviews.map((review, index) => (
-              <div key={index} className="comment-item">
+            {reviewData.reviews.map((review, reviewIndex) => (
+              console.log(review),
+              <div key={reviewIndex} className="comment-item">
                 <div>
                   <h3>Review:</h3>
-                  <img src={`http://127.0.0.1:8000/api/image_detail/${review.imageHash}`} alt={`Review Image ${index}`} onError={() => console.error('Failed to load image')} />
+                  <p>Image Hash : {review.imageHash}</p>
+                  <img
+                    src={`http://127.0.0.1:8000/api/image/${review.imageHash}/`}
+                    alt={`Review Image ${reviewIndex}`}
+                    className="review-image"
+                    onError={() => console.error('Failed to load image')}
+                  />
                   <p>Review Text: {review.reviewText}</p>
                   <p>Rating: {review.rating}</p>
                 </div>

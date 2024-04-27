@@ -37,6 +37,8 @@ export default class Home extends Component {
         await window.ethereum.enable();
         const accounts = await web3.eth.getAccounts(); // Retrieve Ethereum accounts
         const senderAddress = accounts[0]; // Take the first account as senderAddress
+        console.log(senderAddress);
+        this.callAPI(senderAddress);
         this.setState({ web3, isConnected: true,senderAddress });
       } catch (error) {
         console.error("User denied account access");
@@ -45,7 +47,28 @@ export default class Home extends Component {
       console.error("MetaMask not detected");
     }
   }
-
+    // Function to call your API
+    async callAPI(sender) {
+      // Placeholder API call, replace with your actual API call
+      await fetch("http://127.0.0.1:8000/api/create-user-profiles/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          id: sender
+          // Add other necessary data for your API call
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle API response
+          console.log("API response:", data);
+        })
+        .catch(error => {
+          console.error("Error calling API:", error);
+        });
+    }
   render() {
     const { web3, isConnected,senderAddress } = this.state;
     return (
@@ -59,7 +82,7 @@ export default class Home extends Component {
                                       </div>} />
               <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/Contact" element={<Contact />} />
-              <Route path="/Profile" element={<Profile />} />
+              <Route path="/Profile" element={<Profile web3={web3} senderAddress={senderAddress}/>} />
               <Route path="/RatingPage" element={<RatingPage />} />
               <Route path="/ReviewPage" element={<ReviewPage web3={web3} senderAddress={senderAddress} />} />
               <Route path="/ChatForum" element={<ChatForum senderAddress={senderAddress}/>} />
