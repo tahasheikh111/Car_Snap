@@ -10,7 +10,7 @@ const uploads = [
     // Add more photos and results as needed
 ];
 
-const Uploads = () => {
+const Uploads = ({senderAddress}) => {
     return (
         <div className="uploads-container">
             <div className="left-column">

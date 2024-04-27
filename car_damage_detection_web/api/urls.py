@@ -1,9 +1,12 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import (
     user_list, user_detail, image_list, image_detail,
     feedback_list, feedback_detail, rating_list, rating_detail,
     chatforum_list, chatforum_detail, message_list, message_detail,
     login,predict_model_1,predict_model_2, chat_view,update_user_profile, create_user_profile,get_all_user_profile,set_dp,
+    get_user,get_user_photo
 )
 
 urlpatterns = [
@@ -30,9 +33,16 @@ urlpatterns = [
     path('messages/<int:pk>/', message_detail, name='message-detail'),
 
     path('chat/', chat_view, name='chat_view'),
+    
 
+    path('get-user/<str:pk>/', get_user, name='get_user'),
+    path('get-user-photo/<str:pk>/', get_user_photo, name='get_user_photo'),
     path('get-users/', get_all_user_profile, name='get_user_profile'),
     path('create-user-profiles/', create_user_profile, name='create_user_profile'),
     path('update-user-profiles/<str:pk>/', update_user_profile, name='update_user_profile'),
     path('set-dp/<str:pk>/', set_dp, name='set_dp'),
+    # Serving static files during development
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
