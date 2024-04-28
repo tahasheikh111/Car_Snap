@@ -44,6 +44,30 @@ const ReviewPage = ({ web3, senderAddress }) => {
       console.error("Error loading reviews:", error);
     }
   };
+  const fetchUserData = async () => {
+    console.log("IN FETCH USER DATA");
+    console.log(senderAddress);
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/get-user/${senderAddress}/`);
+        if (response.ok) {
+            const data = await response.json();
+            setUserData(data);
+            console.log("USER DATA IN ${data}");
+            console.log(userData);
+        } else {
+            console.error("Failed to fetch user data");
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+    }
+};
+const returnBalance=async (web3,senderAddress)=>{
+    const balanceInWei = await web3.eth.getBalance(senderAddress);
+
+    // Convert balance from Wei to Ether
+    const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+    setBalance(balanceInEther);
+}
 
 // Function to render rating stars
 const renderRatingStars = (rating) => {
@@ -84,17 +108,17 @@ const renderRatingStars = (rating) => {
               console.log(review),
               <div key={reviewIndex} className="comment-item">
                 <div>
-                  <h3>Review:</h3>
-                  <p>Image Hash : {review.imageHash}</p>
+                  <h2 ><b>Review: </b> {review.reviewText}</h2>
+                   
+                  <h2><b>Rating: </b>{review.rating}</h2>
+                  {renderRatingStars(review.rating)}
                   <img
                     src={`http://127.0.0.1:8000/api/image/${review.imageHash}/`}
                     alt={`Review Image ${reviewIndex}`}
                     className="review-image"
                     onError={() => console.error('Failed to load image')}
                   />
-                  <p>Review Text: {review.reviewText}</p>
-                  <p>Rating: {review.rating}</p>
-                  {renderRatingStars(review.rating)}
+  
                 </div>
               </div>
             ))}

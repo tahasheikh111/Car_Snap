@@ -1,3 +1,5 @@
+/* Your existing CSS */
+
 .contact-page {
   display: flex;
   flex-direction: column;
@@ -7,17 +9,20 @@
   font-family: Arial, sans-serif;
   overflow-y: auto;
   background-blend-mode: overlay;
+  position: relative;
 }
 
-.contact-page header {
+.black-header {
   background-color: rgba(255, 255, 255, 0.8);
   color: black;
   padding: 20px;
   width: 100%;
   text-align: center;
+  position: sticky;
+  top: 0;
 }
 
-.contact-page header h1 {
+.black-header h1 {
   font-size: 60px;
   font-weight: 900;
   margin: 0;
@@ -30,6 +35,9 @@
   justify-content: center;
   flex-grow: 1;
   padding: 20px;
+  .name{
+    font-size: 20px;
+  }
 }
 
 .social-media-item {
@@ -58,23 +66,43 @@
   transition: background-color 0.3s;
 }
 
-.chat-container {
+.chat-footer {
   position: fixed;
-  bottom: 20px; /* Ensures the chat box is always 20px above the bottom */
+  bottom: 20px;
   right: 20px;
+}
+
+.chat-container {
   width: 300px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.chat-container.show {
+  transform: translateY(0);
+}
+
+.chat-header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  cursor: pointer;
+}
+
+.chat-header h2 {
+  margin: 0;
 }
 
 .chat-box {
-  height: 200px;
+  max-height: 300px;
   overflow-y: auto;
-}
-
-.messages {
   padding: 10px;
 }
 
@@ -84,12 +112,12 @@
   border-radius: 5px;
 }
 
-.user {
+.message.user {
   background-color: #e5f7ff;
   align-self: flex-end;
 }
 
-.bot {
+.message.bot {
   background-color: #f2f2f2;
   align-self: flex-start;
 }
@@ -105,3 +133,5 @@ input[type="text"] {
 input[type="text"]:focus {
   border-top: 1px solid #007bff;
 }
+
+/* Your existing CSS */

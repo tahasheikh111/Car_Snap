@@ -8,13 +8,14 @@ import BlackNav from "./BlackNav.jsx";
 const socialMediaAccounts = [
   { name: 'Facebook' , icon: <FaFacebook size={36} color="#4267B2" />, url: 'https://www.facebook.com/yourpage' },
   { name: 'Instagram', icon: <FaInstagram size={36} color="#E1306C" />, url: 'https://www.instagram.com/yourpage' },
-  { name: ' LinkedIn', icon: <FaLinkedin size={36} color="#0A66C2" />, url: 'https://www.linkedin.com/yourpage' },
-  { name: '  YouTube', icon: <FaYoutube size={36} color="#FF0000" />, url: 'https://www.youtube.com/yourpage' },
+  { name: 'LinkedIn', icon: <FaLinkedin size={36} color="#0A66C2" />, url: 'https://www.linkedin.com/yourpage' },
+  { name: 'YouTube', icon: <FaYoutube size={36} color="#FF0000" />, url: 'https://www.youtube.com/yourpage' },
 ];
 
 const ContactPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [showChat, setShowChat] = useState(false); // Add state to toggle chat visibility
 
   const handleUserInput = async () => {
     const newMessages = [...messages, { text: inputText, sender: 'user' }];
@@ -56,12 +57,11 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="contact-page" style={{ backgroundImage: `url(${imagepath})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      <header>
+    <div className="contact-page">
+      <header className="black-header">
         <h1>CONTACT US</h1>
       </header>
       <BlackNav />
-      {/* Main content */}
       <div className="main-content">
         {socialMediaAccounts.map((account) => (
           <div key={account.name} className="social-media-item">
@@ -75,24 +75,29 @@ const ContactPage = () => {
           </div>
         ))}
       </div>
-      {/* Chat container */}
-      <div className="chat-container">
-        <div className="chat-box">
-          <div className="messages">
-            {messages.map((message, index) => (
-              <div key={index} className={`message ${message.sender}`}>
-                {message.text}
-              </div>
-            ))}
+      <div className="chat-footer">
+        <div className={`chat-container ${showChat ? 'show' : ''}`}>
+          <div className="chat-header" onClick={() => setShowChat(!showChat)}>
+            <h2>Chat Bot</h2>
           </div>
+          <div className="chat-box">
+            <div className="messages">
+              {messages.map((message, index) => (
+                <div key={index} className={`message ${message.sender}`}>
+                  {message.text}
+                </div>
+              ))}
+            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="Customer Support: Feel Free to Ask..."
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyPress={(e) => { if (e.key === 'Enter') { handleUserInput() }}}
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Customer Support: Feel Free to Ask..."
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          onKeyPress={(e) => { if (e.key === 'Enter') { handleUserInput() }}}
-        />
       </div>
       <Footer />
     </div>
