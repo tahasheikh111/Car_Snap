@@ -1,22 +1,32 @@
+import os
+#from gemini import Conversation
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 import tensorflow as tf
 import cv2
 import numpy as np
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import requests
+import json
+from django.http import HttpResponse
+from django.conf import settings
+
+import google.generativeai as genai
 
 
-from .models import User, Image, Feedback, Rating, ChatForum, Message
+from .models import User, Image, Feedback, Rating, ChatForum, Message,UserProfile
 from .serializer import (
     UserSerializer, ImageSerializer, FeedbackSerializer,
-    RatingSerializer, ChatForumSerializer, MessageSerializer
+    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer
 )
 
 
-model_path1 = "D:/Car_Snap/car_damage_detection_web/api/models/model1.h5"
+model_path1 = "api/models/model1.h5"
 model1 = tf.keras.models.load_model(model_path1)
 print("MODEL1 LOADED")
-model_path2 = "D:/Car_Snap/car_damage_detection_web/api/models/model2.h5"
+model_path2 = "api/models/model2.h5"
 model2 = tf.keras.models.load_model(model_path2)
 print("MODEL2 LOADED")
 
@@ -337,3 +347,206 @@ def message_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
+
+# Set up your API key
+os.environ['GOOGLE_API_KEY'] = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
+api_KEY = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
+
+
+@csrf_exempt
+def chat_view(request):
+    if request.method == 'POST':
+        try:
+            # Extract the message from the request data
+            data = json.loads(request.body)
+            contents = data.get('contents')
+            print("Received payload:", data)  # Debugging statement
+
+            if contents and isinstance(contents, list) and len(contents) > 0:
+                user_message = contents[0]['parts'][0]['text']
+                print("User message:", user_message)  # Debugging statement
+
+                # Set up the generative AI model
+                genai.configure(api_key=os.environ['GOOGLE_API_KEY'])
+                model = genai.GenerativeModel(model_name='gemini-1.5-pro-latest',
+                               system_instruction="""You are a friendly AI assistant.
+                                                    You are to answer only cars related topics and questions.
+                                                    Provide clear and straightforward clarifications and answers to questions.
+                                                    If you don't have information on the subject matter kindly make it known.
+                                                    If questions outside cars are asked, let the user know that you are
+                                                    an assistant for cars related topics.""")
+
+                # Generate content based on the user message
+                response = model.generate_content(user_message)
+                generated_content = response.text
+
+                # Return the generated content as bot response
+                print("Generated content:", generated_content)  # Debugging statement
+                return JsonResponse({'message': generated_content})
+
+            else:
+                return JsonResponse({'error': 'Invalid request payload'}, status=400)
+
+        except Exception as e:
+            # Return error message if any exception occurs
+            return JsonResponse({'error': str(e)}, status=500)
+
+    else:
+        # Return error if the request method is not allowed
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+from .serializer import (
+    UserProfileSerializer,
+)
+@api_view(['GET'])
+def get_all_user_profile(request):
+    # Retrieve all UserProfile instances from the database
+    user_profiles = UserProfile.objects.all()
+    
+    # Serialize the instances
+    serializer = UserProfileSerializer(user_profiles, many=True)
+    
+    # Return the serialized data in the response
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def create_user_profile(request):
+    # Extract the id from the request message
+    id_from_message = request.data.get('id')
+    
+    # Check if id is provided in the request
+    if not id_from_message:
+        return Response({'error': 'id is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Check if a UserProfile with the same id already exists
+    if UserProfile.objects.filter(id=id_from_message).exists():
+        return Response({'error': 'UserProfile with this id already exists'}, status=status.HTTP_200_OK)
+
+    # Create a new UserProfile instance with the id from the message
+    serializer = UserProfileSerializer(data={'id': id_from_message})
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PATCH'])
+def set_dp(request, pk):
+    try:
+        user_profile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if 'photo' not in request.data:
+        return Response({'error': 'photo is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Get the uploaded image data
+    photo_data = request.data['photo']
+
+    # Save the image file to the appropriate location (e.g., profile_photos/)
+    user_profile.photo.save(photo_data.name, photo_data, save=True)
+
+    # Update the photo field of the UserProfile instance with the path to the saved image file
+    user_profile.save()
+
+    # Serialize the updated UserProfile instance
+    serializer = UserProfileSerializer(user_profile)
+
+    # Return the serialized data in the response
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_user(request, pk):
+    try:
+        user_profile = UserProfile.objects.get(pk=pk)
+        serializer = UserProfileSerializer(user_profile)
+        return Response(serializer.data)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
+def get_user_photo(request, filename):
+    try:
+        photo_path = os.path.join(settings.MEDIA_ROOT, 'profile_photos', filename)
+        print(photo_path)
+        with open(photo_path, 'rb') as photo_file:
+            return HttpResponse(photo_file.read(), content_type='image/jpeg')
+    except FileNotFoundError:
+        return HttpResponse(status=404)
+    
+    
+@api_view(['PATCH'])
+def update_user_profile(request, pk):
+    try:
+        user_profile = UserProfile.objects.get(pk=pk)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if 'username' in request.data:
+        # Update username if provided
+        new_username = request.data['username']
+        user_profile.name = new_username
+        
+    if 'description' in request.data:
+        # Update description if provided
+        user_profile.description = request.data['description']
+
+    if 'linkedin' in request.data:
+        # Update linkedin if provided
+        user_profile.linkedin = request.data['linkedin']
+
+    if 'instagram' in request.data:
+        # Update linkedin if provided
+        user_profile.instagram = request.data['instagram']
+        
+    if 'facebook' in request.data:
+        # Update linkedin if provided
+        user_profile.facebook = request.data['facebook']
+        
+    if 'email' in request.data:
+        # Update linkedin if provided
+        user_profile.email = request.data['email']
+    # Similar checks for other fields...
+
+    serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+########################### FOR IMAGES
+@api_view(['POST'])
+def create_image(request):
+    serializer = ImageSerializer(data=request.data)
+    print(request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_images(request, user_address):
+    images = Image.objects.filter(owner_address=user_address)
+    serializer = ImageSerializer(images, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_image(request, id):
+    try:
+        image = Image.objects.get(id=id)
+        # Retrieve the path to the image file
+        image_path = image.photo.path
+        # Open the image file
+        with open(image_path, 'rb') as f:
+            # Read the content of the image file
+            image_data = f.read()
+        # Return the image data as an HTTP response
+        return HttpResponse(image_data, content_type='image/jpeg')  # Adjust content type if needed
+    except Image.DoesNotExist:
+        return Response({"error": "Image not found"}, status=404)

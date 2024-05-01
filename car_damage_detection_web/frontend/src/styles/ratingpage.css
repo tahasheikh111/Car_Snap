@@ -6,25 +6,23 @@
   flex-direction: column;
   min-height: 100vh;
   width: 100vw;
-  background-image: url('../images/car.jpeg'); /* Path to your image */
+  background-image: url('../images/car.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Fixed background */
+  background-attachment: fixed;
 }
 
 .rating-page header {
-  background-color: rgba(255, 255, 255, 0.8); /* Use rgba to add opacity */
+  background-color: rgba(255, 255, 255, 0.8);
   color: black;
   padding: 20px;
   width: 100%;
   text-align: center;
 }
 
-/* Rest of your CSS styles remain the same */
-
 .rating-page header h1 {
-  font-size: 60px;
+  font-size: 4rem;
   font-weight: 800;
   width: 100%;
   text-align: center;
@@ -34,8 +32,9 @@
 .rating-container {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
   padding: 20px;
   box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0.5);
@@ -43,31 +42,48 @@
 
 .rating-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  flex-direction: row;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  width: 100%;
-  margin-bottom: 20px;
+  max-width: 400px;
+  width: calc(100% - 40px);
+  margin: 20px;
 }
 
 .rating-item img {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  margin-right: 30px;
+  margin-bottom: 20px;
 }
 
-.rating-stars {
-  color: gold;
-  align-items: center;
-  padding: 30px;
+.rating-item h3 {
+  font-size: 1.6rem;
+  margin: 0;
 }
-.nonrating-stars {
-  color: rgb(16, 16, 16);
-  align-items: center;
-  padding: 30px;
+
+.rating-value {
+  font-size: 1.4rem;
+  margin: 10px 0;
+}
+
+@media screen and (min-width: 768px) {
+  .rating-page header h1 {
+    font-size: 6rem;
+  }
+
+  .rating-item {
+    max-width: 600px;
+    width: calc(50% - 40px);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .rating-item {
+    max-width: 800px;
+    width: calc(33.33% - 40px);
+  }
 }
