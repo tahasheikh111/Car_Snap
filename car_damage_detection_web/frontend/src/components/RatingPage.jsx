@@ -1,101 +1,93 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Footer from "./Footer.jsx";
-import '../styles/ratingpage.css'; // Import CSS file
-import imagepath from "../images/dreamcar.jpg";
 import BlackNav from "./BlackNav.jsx";
+import '../styles/ratingpage.css';
+import TruffleContract from '@truffle/contract';
+import ReviewStorageArtifact from "../../../Blockchain/build/contracts/ReviewStorage.json";
 
-// Sample ratings data
-const ratings = [
-  // sample ratings data here
-  {
-    id: 1,
-    user: {
-      name: 'John Doe',
-      imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
-    },
-    rating: 4.5,
-    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
-  },
-  {
-    id: 2,
-    user: {
-      name: 'Jane Smith',
-      imageUrl: 'https://randomuser.me/api/portraits/women/2.jpg',
-    },
-    rating: 3.8,
-  },
-  {
-    id: 3,
-    user: {
-      name: 'Alice Johnson',
-      imageUrl: 'https://randomuser.me/api/portraits/women/3.jpg',
-    },
-    rating: 5,
-  },
-  {
-    id: 4,
-    user: {
-      name: 'Bob Williams',
-      imageUrl: 'https://randomuser.me/api/portraits/men/4.jpg',
-    },
-    rating: 2.5,
-    description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
-  },
-  {
-    id: 5,
-    user: {
-      name: 'Eve Anderson',
-      imageUrl: 'https://randomuser.me/api/portraits/women/5.jpg',
-    },
-    rating: 4,
-  },
-  {
-    id: 6,
-    user: {
-      name: 'Mike Wilson',
-      imageUrl: 'https://randomuser.me/api/portraits/men/6.jpg',
-    },
-    rating: 3.2,
-  },
-];
+const RatingPage = ({ web3 }) => {
+  const [ratings, setRatings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const RatingPage = () => {
-  // Function to render star rating
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 0; i < 5; i++) {
-      if (i < Math.floor(rating)) {
-        stars.push(<span key={i} className="rating-stars">★</span>);
-      } else {
-        stars.push(<span key={i} className="nonrating-stars">★</span>);
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const ReviewStorage = TruffleContract(ReviewStorageArtifact);
+        ReviewStorage.setProvider(web3.currentProvider);
+        const instance = await ReviewStorage.deployed();
+        const users = await instance.getAllUsers();
+        const ratingsData = await Promise.all(
+          users.map(async (user) => {
+            const userReviews = await instance.getReviewsByUser(user);
+            const totalRating = userReviews.reduce((acc, review) => acc + review.rating, 0);
+            const averageRating = totalRating / userReviews.length;
+            const userDetails = await fetchUserDetails(user); // Fetch user details
+            return {
+              userDetails: userDetails,
+              averageRating: averageRating.toFixed(1),
+            };
+          })
+        );
+        setRatings(ratingsData);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
       }
+    };
+
+    if (web3) {
+      fetchRatings();
     }
-    return stars;
+  }, [web3]);
+
+  // Function to fetch user details from Django API based on user ID
+  const fetchUserDetails = async (userId) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/user_detail/${userId}`);
+      if (response.ok) {
+        const userData = await response.json();
+        return userData;
+      } else {
+        console.error('Failed to fetch user details:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+    return null;
   };
 
   return (
-    <div className="rating-page" style={{ backgroundImage: `url(${imagepath})`,  backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      {/* Header */}
+    <div className="rating-page">
       <header>
         <h1>Ratings</h1>
       </header>
       <BlackNav />
-      {/* Ratings list */}
       <div className="rating-container">
-        {ratings.map((rating) => (
-          <div key={rating.id} className="rating-item">
-            <div className="rating-user">
-              <img src={rating.user.imageUrl} alt={rating.user.name} />
-              <div>
-                <h3>{rating.user.name}</h3>
-                <p className="rating-value">
-                  {renderStars(rating.rating)} ({rating.rating.toFixed(1)})
-                </p>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error.message}</p>
+        ) : (
+          ratings.length === 0 ? (
+            <p>No ratings available</p>
+          ) : (
+            ratings.map((rating, index) => (
+              <div key={index} className="rating-item">
+                {rating.userDetails && (
+                  <div className="user-details">
+                    <h3>User Name: {rating.userDetails.username}</h3>
+                    {/* Add other user details you want to display */}
+                  </div>
+                )}
+                <div className="rating-info">
+                  <p>Average Rating: {rating.averageRating}</p>
+                </div>
               </div>
-            </div>
-            {rating.description && <p className="rating-description">{rating.description}</p>}
-          </div>
-        ))}
+            ))
+          )
+        )}
       </div>
       <Footer />
     </div>
@@ -103,8 +95,3 @@ const RatingPage = () => {
 };
 
 export default RatingPage;
-
-
-
-
-

@@ -147,6 +147,53 @@
     font-size: 10px;
 }
 
+.settings-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 50vw;
+    /* Half of the viewport width */
+    background-color: white;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    /* Add vertical scrollbar */
+}
+
+.settings-panel h3 {
+    margin-bottom: 10px;
+}
+
+.settings-panel .info-item {
+    margin-bottom: 15px;
+}
+
+.settings-panel .info-label {
+    font-weight: bold;
+}
+
+.settings-panel input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.settings-panel button {
+    background-color: #000000;
+    color: white;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.settings-panel button:hover {
+    background-color: #0c0d0d45;
+}
+
 @media only screen and (max-width: 650px) {
     .top-bar-profile {
         flex-direction: column;

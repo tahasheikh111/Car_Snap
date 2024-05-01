@@ -1,7 +1,8 @@
-# from model it takes and convert it into JSON format for frontend easy to understand the backend quewruies and give response to frontend
+# serializers.py
 from rest_framework import serializers
-
-from .models import User, Image, Feedback, Rating, ChatForum, Message
+from .models import (
+    User, Image, Feedback, Rating, ChatForum, Message, ImagePost, UserProfile
+)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,4 +34,14 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = '__all__'
 
+class ImagePostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImagePost
+        fields = '__all__'
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+
+        

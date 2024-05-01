@@ -3,6 +3,10 @@
     width: 100%;
 }
 
+html {
+    width: fit-content;
+}
+
 .about-us-heading {
     color: black;
     background-color: white;
@@ -38,6 +42,7 @@
 
 .left-content {
     flex: 1;
+    padding: 10px;
 }
 
 .right-content {
@@ -49,18 +54,6 @@
     /* Increase font size to make it bigger */
     font-weight: bold;
     /* Make the text bold */
-}
-
-.section-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* Center items horizontally */
-    justify-content: center;
-    /* Center items vertically */
-    margin-top: 10px;
-    height: 25vh;
-    /* Ensure the container takes up the full viewport height */
 }
 
 .image-container {
@@ -85,7 +78,7 @@
 }
 
 .our-idea {
-    width: 50%;
+    width: 70%;
     /* Set the width to 70% */
     margin: 20px auto;
     /* Center the div horizontally and add margin */
