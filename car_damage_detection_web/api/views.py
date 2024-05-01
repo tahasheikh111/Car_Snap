@@ -347,6 +347,7 @@ def message_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
+#View for chat bot and the gemini's api
 
 # Set up your API key
 os.environ['GOOGLE_API_KEY'] = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
