@@ -9,18 +9,79 @@ import imagepath from "../images/user.png"
 import AiImage from "../images/Ai_Car_Snap.jpg"
 import Ads_section from './Ads_section.jsx';
 import Developers from "./Developers.jsx";
+import ReviewStorageArtifact from "../../../Blockchain/build/contracts/ReviewStorage.json"
+import TruffleContract from '@truffle/contract'; // Adjust the import path
 const Navbar_home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [reviewStorageInstance, setReviewStorageInstance] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    // Update the current date every second
-    const intervalId = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000);
+    const initializeContract = async () => {
+      try {
+        const reviewStorageContract = TruffleContract(ReviewStorageArtifact);
+        reviewStorageContract.setProvider(web3.currentProvider);
+        const instance = await reviewStorageContract.deployed();
+        setReviewStorageInstance(instance);
+        loadReviews(instance);
+        const intervalId = setInterval(() => {
+          setCurrentDate(new Date());
+        }, 1000);
+    
+        // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);
+      } catch (error) {
+        console.error("Error initializing contract:", error);
+      }
+    };
 
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, []);
+    if (web3) {
+      initializeContract();
+    }
+  }, [web3]);
+
+  const loadReviews = async (instance) => {
+    try {
+      const users = await instance.getAllUsers();
+      const reviewsData = await Promise.all(
+        users.map(async (user) => {
+          const userReviews = await instance.getReviewsByUser(user);
+          return {
+            userDetails: user,
+            reviews: userReviews,
+          };
+        })
+      );
+      setReviews(reviewsData);
+    } catch (error) {
+      console.error("Error loading reviews:", error);
+    }
+  };
+  const fetchUserData = async () => {
+    console.log("IN FETCH USER DATA");
+    console.log(senderAddress);
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/get-user/${senderAddress}/`);
+        if (response.ok) {
+            const data = await response.json();
+            setUserData(data);
+            console.log("USER DATA IN ${data}");
+            console.log(userData);
+        } else {
+            console.error("Failed to fetch user data");
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+    }
+};
+const returnBalance=async (web3,senderAddress)=>{
+    const balanceInWei = await web3.eth.getBalance(senderAddress);
+
+    // Convert balance from Wei to Ether
+    const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+    setBalance(balanceInEther);
+}
+
 
   const formattedDate = currentDate.toLocaleString();
 
@@ -33,40 +94,25 @@ const Navbar_home = () => {
         <Intro />
         <div style={{ display: 'flex' }}>
           {/* Left side: Home_review components */}
+           
           <div style={{ flex: 2, marginRight: '20px' }}>
-            <Home_review
-              photoSrc={imagepath}
-              heading="Example Heading"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-              name="John Doe"
-              date="March 10, 2024"
-              rating={4.5}
-            />
-            <Home_review
-              photoSrc={imagepath}
-              heading="Example Heading"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-              name="John Doe"
-              date="March 10, 2024"
-              rating={4.5}
-            />
-            <Home_review
-              photoSrc={imagepath}
-              heading="Example Heading"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-              name="John Doe"
-              date="March 10, 2024"
-              rating={4.5}
-            />
-            <Home_review
-              photoSrc={imagepath}
-              heading="Example Heading"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-              name="John Doe"
-              date="March 10, 2024"
-              rating={4.5}
-            />
-          </div>
+  {reviews.map((reviewData, index) => (
+    <div key={index}>
+      {reviewData.reviews.slice(0, 5).map((review, reviewIndex) => (
+        <Home_review
+          key={reviewIndex}
+          photoSrc={`http://127.0.0.1:8000/api/image/${review.imageHash}/`}
+          heading="Heading"
+          description={review.reviewText}
+          name={reviewData.userDetails.username}
+          date={new Date(review.date * 1000).toLocaleDateString()} // Format the date
+          rating={review.rating}
+        />
+      ))}
+    </div>
+  ))}
+</div>
+
 
 
           {/* Right side: Ads_section component */}
