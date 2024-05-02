@@ -8,19 +8,21 @@ contract ReviewStorage {
         string imageHash;
         string reviewText;
         uint8 rating; // New rating element
+        uint256 date; // New date element
     }
 
     mapping(address => Review[]) public userReviews;
     address[] public users;
 
-    event ReviewAdded(address indexed userAddress, string imageHash, string reviewText, uint8 rating); // Update event definition
+    event ReviewAdded(address indexed userAddress, string imageHash, string reviewText, uint8 rating, uint256 date); // Update event definition
 
     function addReview(string memory _imageHash, string memory _reviewText, uint8 _rating) public {
         Review memory newReview = Review({
             userAddress: msg.sender,
             imageHash: _imageHash,
             reviewText: _reviewText,
-            rating: _rating // Assign rating
+            rating: _rating, // Assign rating
+            date: block.timestamp // Assign current block timestamp as date
         });
 
         userReviews[msg.sender].push(newReview);
@@ -29,7 +31,7 @@ contract ReviewStorage {
             users.push(msg.sender);
         }
 
-        emit ReviewAdded(msg.sender, _imageHash, _reviewText, _rating); // Emit event with rating
+        emit ReviewAdded(msg.sender, _imageHash, _reviewText, _rating, block.timestamp); // Emit event with rating and date
     }
 
     function getReviewsByUser(address _user) public view returns (Review[] memory) {

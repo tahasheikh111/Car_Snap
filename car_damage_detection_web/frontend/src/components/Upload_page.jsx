@@ -16,6 +16,7 @@ const Upload_page = ({ web3, senderAddress }) => {
   const [reviewText, setReviewText] = useState("");
   const [imageHash, setImageHash] = useState("");
   const [rating, setRating] = useState(0); // State for rating
+  const [web3Connected, setWeb3Connected] = useState(false); // State to track MetaMask connection
 
   // Initialize the contract instance
   const initializeContract = async () => {
@@ -31,8 +32,10 @@ const Upload_page = ({ web3, senderAddress }) => {
       const instance2 = await reviewStorageContract.deployed();
       setReviewStorageInstance(instance2);
       setImageStorageInstance(instance);
+      setWeb3Connected(true); // Set connected state to true
     } catch (error) {
       console.error("Error initializing contract:", error);
+      setWeb3Connected(false); // Set connected state to false
     }
   };
 
@@ -178,8 +181,13 @@ const Upload_page = ({ web3, senderAddress }) => {
   };
 
   useEffect(() => {
-    initializeContract();
-  }, []);
+    if (web3) {
+      setWeb3Connected(true);
+      initializeContract();
+    } else {
+      setWeb3Connected(false);
+    }
+  }, [web3]);
 
 
   return (
@@ -191,8 +199,15 @@ const Upload_page = ({ web3, senderAddress }) => {
           <BlackNav />
         </div>
       </div>
-
-      <div
+      {web3Connected ? (
+        <div
+          className="upload-page"
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundColor: "rgba(255, 255, 255, 0.5)", // Adjust the alpha value (0.5 is 50% opacity)
+          }}
+        >
+          <div
         className="upload-page"
         style={{
           backgroundImage: `url(${backgroundImage})`,
@@ -258,6 +273,12 @@ const Upload_page = ({ web3, senderAddress }) => {
           <button onClick={handleUpload}>Upload</button>
         </div>
       </div>
+        </div>
+      ) : (
+        <div className="error_message">
+          <p>MetaMask is not connected. Please connect MetaMask to use this feature.</p>
+        </div>
+      )}
       <Fotter />
     </>
   );

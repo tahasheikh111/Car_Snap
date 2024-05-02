@@ -99,3 +99,16 @@ html {
         width: fit-content;
     }
 }
+.error_message {
+    background-color: rgba(255, 255, 255, 0.9); /* Adjust the alpha value for the background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow to the dialog box */
+    padding: 20px; /* Add padding to the content inside the dialog box */
+    border-radius: 8px; /* Add border radius to the dialog box */
+    position: fixed; /* Position the dialog box */
+    top: 50%; /* Move the dialog box 50% down from the top */
+    left: 50%; /* Move the dialog box 50% from the left */
+    transform: translate(-50%, -50%); /* Center the dialog box */
+  }
+  
+  
+  
