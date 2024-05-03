@@ -4,6 +4,7 @@ import BlackNav from "./BlackNav.jsx";
 import backgroundImage from "../images/_49e4c801-00d4-4429-a534-46d5ed9e0d5f.jpeg"; // Import your background image
 import ImageStorageArtifact from "../../../Blockchain/build/contracts/ImageStorage.json";
 import ReviewStorageArtifact from "../../../Blockchain/build/contracts/ReviewStorage.json";
+import ResultStorageArtifact from "../../../Blockchain/build/contracts/ResultStorage.json";
 import Fotter from "./Footer.jsx";
 import TruffleContract from "@truffle/contract"; // Adjust the import path
 
@@ -61,22 +62,41 @@ const Upload_page = ({ web3, senderAddress }) => {
     setRating(value);
   };
   const handleSubmitReview = async () => {
-    // Handle review submission
-    console.log("Submitting review:", reviewText);
-    const result = await reviewStorageInstance.addReview(
-      imageHash,
-      reviewText,
-      rating, // Pass rating to the contract function
-      {
-        from: senderAddress, // Specify sender's address
-      }
-    );
+    try {
+      // Handle review submission
+      console.log("Submitting review:", reviewText);
+      const result = await reviewStorageInstance.addReview(
+        imageHash,
+        reviewText,
+        rating, // Pass rating to the contract function
+        {
+          from: senderAddress, // Specify sender's address
+        }
+      );
 
-    console.log("Review added:", result);
-    // Reset the review text and rating after submission
-    setReviewText("");
-    setRating(0);
+      console.log("Review added:", result);
+      // Reset the review text and rating after submission
+      setReviewText("");
+      setRating(0);
+
+      // Store the result in the ResultStorage contract
+      const resultStorageContract = TruffleContract(ResultStorageArtifact);
+      resultStorageContract.setProvider(web3.currentProvider);
+      const resultStorageInstance = await resultStorageContract.deployed();
+      const resultId = await resultStorageInstance.storeResult(
+        imageHash,
+        result, // Assuming resultText is the variable containing the result
+        {
+          from: senderAddress, // Specify sender's address
+        }
+      );
+      console.log("Result stored in ResultStorage contract with ID:", resultId);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      // Handle error
+    }
   };
+
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];

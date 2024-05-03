@@ -102,7 +102,7 @@ const returnBalance=async (web3,senderAddress)=>{
         <Home_review
           key={reviewIndex}
           photoSrc={`http://127.0.0.1:8000/api/image/${review.imageHash}/`}
-          heading="Heading"
+          heading="UNKNOWN"
           description={review.reviewText}
           name={reviewData.userDetails.username}
           date={new Date(review.date * 1000).toLocaleDateString()} // Format the date
