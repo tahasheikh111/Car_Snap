@@ -60,7 +60,7 @@ const SnapTalksPage = ({ senderAddress }) => {
             <div className="message-container">
                 {messages.map((msg, index) => (
                     <div key={index} className={`message-item ${msg.sender === senderAddress ? 'sent' : 'received'}`}>
-                        <div className="user-name"><b>{"UNKNOWN"}</b></div>
+                        <div className="user-name"><b>{senderAddress}</b></div>
                         <div className="message-text">{msg.text}</div>
                     </div>
                 ))}
