@@ -98,7 +98,7 @@ const returnBalance=async (web3,senderAddress)=>{
           <div style={{ flex: 2, marginRight: '20px' }}>
   {reviews.map((reviewData, index) => (
     <div key={index}>
-      {reviewData.reviews.slice(0, 5).map((review, reviewIndex) => (
+      {reviewData.reviews.slice(0, 10).map((review, reviewIndex) => (
         <Home_review
           key={reviewIndex}
           photoSrc={`http://127.0.0.1:8000/api/image/${review.imageHash}/`}

@@ -112,10 +112,9 @@ return (
           {reviewData.reviews.map((review, reviewIndex) => (
             <div key={reviewIndex} className="comment-item">
               <div>
-                <h2 ><b>Review: </b> {review.reviewText}</h2>
                 <h2><b>Rating: </b>{review.rating}</h2>
-                {renderRatingStars(review.rating)}
-               
+                {renderRatingStars(review.rating)}  {new Date(review.date * 1000).toLocaleDateString()}
+                <h2 ><b>Review: </b> {review.reviewText}</h2>
                   <div>
                     <h2><b>Result: </b>{review.result}</h2>
                   </div>
