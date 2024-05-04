@@ -1,8 +1,15 @@
 # serializers.py
 from rest_framework import serializers
 from .models import (
-    User, Image, Feedback, Rating, ChatForum, Message, ImagePost, UserProfile
+    User, Image, Feedback, Rating, ChatForum, Message, ImagePost, UserProfile,Result
 )
+
+
+class ResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Result
+        fields = '__all__'
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

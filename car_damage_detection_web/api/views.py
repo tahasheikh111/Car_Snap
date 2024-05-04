@@ -16,11 +16,30 @@ from django.conf import settings
 import google.generativeai as genai
 
 
-from .models import User, Image, Feedback, Rating, ChatForum, Message,UserProfile
+from .models import User, Image, Feedback, Rating, ChatForum, Message,UserProfile,Result
 from .serializer import (
     UserSerializer, ImageSerializer, FeedbackSerializer,
-    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer
+    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer,ResultSerializer,
 )
+
+@api_view(['POST'])
+def store_result(request):
+    serializer = ResultSerializer(data=request.data)
+    print(request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_result(request, image_hash):
+    try:
+        result = Result.objects.get(image_hash=image_hash)
+        return Response({"result": result.value})
+    except Result.DoesNotExist:
+        return Response({"error": "Result not found"}, status=404)
+
+
 
 
 model_path1 = "api/models/model1.h5"

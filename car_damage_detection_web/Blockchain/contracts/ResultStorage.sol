@@ -21,10 +21,10 @@ contract ResultStorage {
         resultCount++;
     }
 
-function getResult(string memory _imageHash) public view returns (address, string memory) {
+function getResult(string memory _imageHash) public view returns (string memory) {
     bytes32 key = keccak256(abi.encodePacked(_imageHash));
     Result storage result = results[key];
-    return (result.sender, result.result);
+    return result.result;
 }
 
 }

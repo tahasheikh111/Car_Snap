@@ -34,15 +34,9 @@ const ReviewPage = ({ web3, senderAddress }) => {
       const reviewsData = await Promise.all(
         users.map(async (user) => {
           const userReviews = await instance.getReviewsByUser(user);
-          const reviewsWithResults = await Promise.all(
-            userReviews.map(async (review) => {
-              const result = await fetchResult(review.imageHash);
-              return { ...review, result };
-            })
-          );
           return {
             userDetails: user,
-            reviews: reviewsWithResults,
+            reviews: userReviews,
           };
         })
       );
@@ -57,17 +51,18 @@ const ReviewPage = ({ web3, senderAddress }) => {
       const resultStorageContract = TruffleContract(ResultStorageArtifact);
       resultStorageContract.setProvider(web3.currentProvider);
       const resultStorageInstance = await resultStorageContract.deployed();
-      const contractAddress = resultStorageInstance.address; // Get the deployed contract address
-      const resultStorageDeployed = await resultStorageContract.at(contractAddress); // Use the deployed contract address
   
-      // Assuming that you need to use the imageHash as the key to fetch the result
-      const result = await resultStorageDeployed.getResult(imageHash);
+      // Store the result in a variable
+      const result = await resultStorageInstance.getResult(imageHash);
+  
+      // Return the result
       return result;
     } catch (error) {
-      console.error("Error fetching results:", error);
+      console.error("Error fetching results:", );
       return null;
-    }
+    } 
   };
+  
   
   
   
@@ -93,6 +88,20 @@ const renderRatingStars = (rating) => {
     return stars;
 };
 
+const getResult = async (imageHash) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/get-result/${imageHash}/`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch result');
+    }
+    const data = await response.json();
+    return data.result || 'No result found'; // Return default value if result is null
+  } catch (error) {
+    console.error('Error:', error);
+    return 'Error fetching result';
+  }
+};
+
 
 return (
   <div className="review-page">
@@ -116,7 +125,7 @@ return (
                 {renderRatingStars(review.rating)}  {new Date(review.date * 1000).toLocaleDateString()}
                 <h2 ><b>Review: </b> {review.reviewText}</h2>
                   <div>
-                    <h2><b>Result: </b>{review.result}</h2>
+                    <h2><b>Result: </b>{getResult(review.imageHash)}</h2>
                   </div>
                
                 <img

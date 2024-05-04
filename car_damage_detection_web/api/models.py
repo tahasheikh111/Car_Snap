@@ -5,7 +5,10 @@ import hashlib
 from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
-
+class Result(models.Model):
+    image_hash = models.CharField(max_length=255)
+    owner_address = models.CharField(max_length=100,default='')
+    value = models.CharField(max_length=255)
 
 class UserProfile(models.Model):
     id=models.CharField(max_length=100,primary_key=True)

@@ -105,7 +105,23 @@ const Upload_page = ({ web3, senderAddress }) => {
   };
 
   const handleUpload = async () => {
+    
     try {
+      var res;
+      if (!selectedImage || !imageStorageInstance) {
+        console.error("Image or contract instance not available.");
+        return;
+      }
+
+      // Read the contents of the image file
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const buffer = Buffer.from(reader.result); // Convert to buffer
+        const hash = await hashImage(buffer); // Hash the buffer
+        setImageHash(hash);
+        // Call the storeImage function of the ImageStorage contract
+        console.log("Image Hashed ");
+        console.log(hash);
       // Perform image upload and API call here
       const formData = new FormData();
       console.log(file);
@@ -125,6 +141,7 @@ const Upload_page = ({ web3, senderAddress }) => {
         // Code to execute if predicted_class is "Not Damaged"
         console.log("NOT DAMAGED");
         setResult(`- ${responseData.predicted_class}`);
+        res=responseData.predicted_class;
       } else {
         try {
           console.log("DAMAGED SO AGAIN DO CATEGORIES");
@@ -137,27 +154,48 @@ const Upload_page = ({ web3, senderAddress }) => {
           );
           const responseData2 = await response2.json();
           console.log(responseData2.predicted_class);
+          res=responseData2.predicted_class;
           setResult(`- ${responseData2.predicted_class}`);
         } catch (error) {
           console.error("Error uploading image:", error);
           // Handle error
         }
       }
-      // Check if image and contract instance exist
-      if (!selectedImage || !imageStorageInstance) {
-        console.error("Image or contract instance not available.");
-        return;
-      }
 
-      // Read the contents of the image file
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const buffer = Buffer.from(reader.result); // Convert to buffer
-        const hash = await hashImage(buffer); // Hash the buffer
-        setImageHash(hash);
-        // Call the storeImage function of the ImageStorage contract
-        console.log("Image Hashed ");
-        console.log(hash);
+     console.log(" musaaaaaa");
+     console.log("result",res);
+     console.log(typeof res);
+
+                          //const response = await fetch('http://127.0.0.1:8000/api/store-image-result/', {
+                            try {
+                              const newformData = new FormData();
+                              newformData.append("value",res);
+                              newformData.append("image_hash", hash); // Append the user ID
+                              newformData.append("owner_address",senderAddress)
+                              console.log(newformData);
+                          
+                              const response = await fetch("http://127.0.0.1:8000/api/store-result/", {
+                                method: "POST",
+                                body: newformData,
+                              });
+                          
+                              if (response.ok) {
+                                const responseData = await response.json();
+                                console.log("Result uploaded successfully:", responseData);
+                                // Handle further processing if needed
+                              } else {
+                                console.error("Failed to upload result:", response.statusText);
+                                // Handle error
+                              }
+                            } catch (error) {
+                              console.error("Failed:", error);
+                              // Handle error
+                            }
+
+
+
+      // Check if image and contract instance exist
+
         try {
           const newformData = new FormData();
           newformData.append("photo", file);
@@ -292,6 +330,7 @@ const Upload_page = ({ web3, senderAddress }) => {
           </p>
           <button onClick={handleUpload}>Upload</button>
         </div>
+        <Fotter />
       </div>
         </div>
       ) : (
@@ -299,7 +338,7 @@ const Upload_page = ({ web3, senderAddress }) => {
           <p>MetaMask is not connected. Please connect MetaMask to use this feature.</p>
         </div>
       )}
-      <Fotter />
+     
     </>
   );
 };

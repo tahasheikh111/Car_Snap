@@ -10,12 +10,13 @@ import AiImage from "../images/Ai_Car_Snap.jpg"
 import Ads_section from './Ads_section.jsx';
 import Developers from "./Developers.jsx";
 import ReviewStorageArtifact from "../../../Blockchain/build/contracts/ReviewStorage.json"
+import ResultStorageArtifact from "../../../Blockchain/build/contracts/ResultStorage.json"
 import TruffleContract from '@truffle/contract'; // Adjust the import path
 const Navbar_home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [reviewStorageInstance, setReviewStorageInstance] = useState(null);
   const [reviews, setReviews] = useState([]);
-
+  const [result, setResult] = useState('');
   useEffect(() => {
     const initializeContract = async () => {
       try {
@@ -24,6 +25,10 @@ const Navbar_home = () => {
         const instance = await reviewStorageContract.deployed();
         setReviewStorageInstance(instance);
         loadReviews(instance);
+        const resultStorageContract = TruffleContract(ResultStorageArtifact);
+        resultStorageContract.setProvider(web3Instance.currentProvider);
+        const instance1 = await resultStorageContract.deployed();
+        setResultStorageInstance(instance1);
         const intervalId = setInterval(() => {
           setCurrentDate(new Date());
         }, 1000);
@@ -81,6 +86,28 @@ const returnBalance=async (web3,senderAddress)=>{
     const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
     setBalance(balanceInEther);
 }
+// Inside your component
+
+useEffect(() => {
+  const initializeContract = async () => {
+    try {
+      const web3Instance = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+      setWeb3(web3Instance);
+
+
+
+      // Call your contract methods here
+    } catch (error) {
+      console.error('Error initializing contract:', error);
+    }
+  };
+
+  if (web3) {
+    initializeContract();
+  }
+}, [web3]);
+
+
 
 
   const formattedDate = currentDate.toLocaleString();
@@ -98,11 +125,11 @@ const returnBalance=async (web3,senderAddress)=>{
           <div style={{ flex: 2, marginRight: '20px' }}>
   {reviews.map((reviewData, index) => (
     <div key={index}>
-      {reviewData.reviews.slice(0, 10).map((review, reviewIndex) => (
+      {reviewData.reviews.slice(0, 10).map((review, reviewIndex) => ( 
         <Home_review
           key={reviewIndex}
           photoSrc={`http://127.0.0.1:8000/api/image/${review.imageHash}/`}
-          heading="UNKNOWN"
+         // heading={handleFetchResult(review.imageHash)}
           description={review.reviewText}
           name={reviewData.userDetails.username}
           date={new Date(review.date * 1000).toLocaleDateString()} // Format the date
@@ -112,9 +139,6 @@ const returnBalance=async (web3,senderAddress)=>{
     </div>
   ))}
 </div>
-
-
-
           {/* Right side: Ads_section component */}
           <div style={{ flex: 1 }}>
           <h1 style={{ fontSize: '25px', marginBottom: '10px', borderBottom: '2px solid' }}>Current Date:</h1>

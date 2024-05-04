@@ -6,10 +6,14 @@ from .views import (
     feedback_list, feedback_detail, rating_list, rating_detail,
     chatforum_list, chatforum_detail, message_list, message_detail,
     login,predict_model_1,predict_model_2, chat_view,update_user_profile, create_user_profile,get_all_user_profile,set_dp,
-    get_user,get_user_photo,create_image,get_images,get_image
+    get_user,get_user_photo,create_image,get_images,get_image,store_result,get_result
 )
 
 urlpatterns = [
+    path('store-result/', store_result, name='store_result'),
+    path('get-result/<str:id>/', get_result, name='get_result'),
+
+
     path('predict_model_1/',predict_model_1,name='predict_model_1'),
     path('predict_model_2/',predict_model_2,name='predict_model_2'),
     path('login/', login, name='login'),
