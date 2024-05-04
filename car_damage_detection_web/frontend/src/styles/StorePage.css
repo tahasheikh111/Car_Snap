@@ -1,0 +1,253 @@
+/* StorePage.css */
+
+/* StorePage Container */
+.store-container {
+    margin: 20px;
+    padding: 20px;
+    height: 756px;
+}
+
+/* Car Parts List */
+.car-parts-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Individual Car Part */
+.car-part {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+}
+
+/* Add to Cart Button */
+.add-to-cart-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Cart Sidebar */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 33%;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    transform: translateX(100%);
+    z-index: 1000;
+}
+
+.cart-sidebar.open {
+    transform: translateX(0);
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.cart-header h2 {
+    margin: 0;
+}
+
+.cart-items-container {
+    max-height: calc(100% - 200px); /* Adjust the height as needed */
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.cart-items {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.cart-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item p {
+    margin: 0;
+}
+
+.cart-item button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cart-item button:hover {
+    background-color: #c82333;
+}
+
+.checkout-btn {
+    width: 100%;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkout-btn:hover {
+    background-color: #218838;
+}
+
+/* Cart Icon Button */
+.cart-icon-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s;
+}
+
+.cart-icon-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Close Button */
+.close-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: #777;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* Add Item Sidebar */
+.add-item-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 33%;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    transform: translateX(100%);
+    z-index: 1000;
+}
+
+.add-item-sidebar.open {
+    transform: translateX(0);
+}
+
+.add-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.add-item-header h2 {
+    margin: 0;
+}
+
+.add-item-form {
+    padding: 20px;
+}
+
+.add-item-form input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.add-item-form button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-item-form button:hover {
+    background-color: #218838;
+}
+
+.error-msg {
+    color: #dc3545;
+    margin-top: 5px;
+}
+
+
+/* Add Item Button */
+.add-item-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-item-btn:hover {
+    background-color: #0056b3;
+}
+
+.add-item-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 75px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s;
+}
+
+.add-item-icon:hover {
+    background-color: #0056b3;
+}
+
+
+
+

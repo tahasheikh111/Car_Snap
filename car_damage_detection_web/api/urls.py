@@ -5,15 +5,12 @@ from .views import (
     user_list, user_detail, image_list, image_detail,
     feedback_list, feedback_detail, rating_list, rating_detail,
     chatforum_list, chatforum_detail, message_list, message_detail,
-    login,predict_model_1,predict_model_2, chat_view,update_user_profile, create_user_profile,get_all_user_profile,set_dp,
-    get_user,get_user_photo,create_image,get_images,get_image,store_result,get_result
+    login,predict_model_1,predict_model_2, chat_view,update_user_profile,
+    create_user_profile,get_all_user_profile,set_dp, get_user,get_user_photo,
+    create_image,get_images,get_image, car_parts_list, add_car_part
 )
 
 urlpatterns = [
-    path('store-result/', store_result, name='store_result'),
-    path('get-result/<str:id>/', get_result, name='get_result'),
-
-
     path('predict_model_1/',predict_model_1,name='predict_model_1'),
     path('predict_model_2/',predict_model_2,name='predict_model_2'),
     path('login/', login, name='login'),
@@ -47,6 +44,10 @@ urlpatterns = [
     path('update-user-profiles/<str:pk>/', update_user_profile, name='update_user_profile'),
     path('set-dp/<str:pk>/', set_dp, name='set_dp'),
     # Serving static files during development
+
+
+    path('car_parts/', car_parts_list, name='car_parts_list'),
+    path('add_car_part/', add_car_part, name='add_car_part'),
 ]
 
 if settings.DEBUG:

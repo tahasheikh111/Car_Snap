@@ -85,3 +85,12 @@ class Message(models.Model):
 
 
 
+
+class CarPart(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.URLField()
+    added_by = models.CharField(max_length=100)  # Assuming it's the user's Ethereum address
+
+    def __str__(self):
+        return self.name

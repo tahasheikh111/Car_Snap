@@ -1,15 +1,9 @@
 # serializers.py
 from rest_framework import serializers
 from .models import (
-    User, Image, Feedback, Rating, ChatForum, Message, ImagePost, UserProfile,Result
+    User, Image, Feedback, Rating, ChatForum, Message, ImagePost, 
+    UserProfile, CarPart
 )
-
-
-class ResultSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Result
-        fields = '__all__'
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,3 +46,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
         
+class CarPartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarPart
+        fields = ['id', 'name', 'price', 'image', 'added_by']

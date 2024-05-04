@@ -1,5 +1,5 @@
 pragma solidity >=0.4.22 <0.8.0;
-
+//updated sol files functionality
 pragma experimental ABIEncoderV2;
 
 contract ImageStorage {

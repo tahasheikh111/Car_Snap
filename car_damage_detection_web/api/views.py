@@ -16,30 +16,12 @@ from django.conf import settings
 import google.generativeai as genai
 
 
-from .models import User, Image, Feedback, Rating, ChatForum, Message,UserProfile,Result
+from .models import User, Image, Feedback, Rating, ChatForum, Message,UserProfile
 from .serializer import (
     UserSerializer, ImageSerializer, FeedbackSerializer,
-    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer,ResultSerializer,
+    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer,
+    CarPartSerializer
 )
-
-@api_view(['POST'])
-def store_result(request):
-    serializer = ResultSerializer(data=request.data)
-    print(request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
-def get_result(request, image_hash):
-    try:
-        result = Result.objects.get(image_hash=image_hash)
-        return Response({"result": result.value})
-    except Result.DoesNotExist:
-        return Response({"error": "Result not found"}, status=404)
-
-
 
 
 model_path1 = "api/models/model1.h5"
@@ -366,6 +348,7 @@ def message_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
+#View for chat bot and the gemini's api
 
 # Set up your API key
 os.environ['GOOGLE_API_KEY'] = "AIzaSyA4PYlDIlUN1ZSGI5nPfKfnvvrPmug33qU"
@@ -569,3 +552,26 @@ def get_image(request, id):
         return HttpResponse(image_data, content_type='image/jpeg')  # Adjust content type if needed
     except Image.DoesNotExist:
         return Response({"error": "Image not found"}, status=404)
+    
+
+from .models import CarPart
+
+
+@api_view(['GET'])  # Specify that this view only responds to GET requests
+def car_parts_list(request):
+    car_parts = CarPart.objects.all()
+    serializer = CarPartSerializer(car_parts, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def add_car_part(request):
+    if request.method == 'POST':
+        serializer = CarPartSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        else:
+            print("Nihao")
+            print(serializer.errors)  # Print out the errors
+            return Response(serializer.errors, status=400)
