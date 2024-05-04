@@ -1,27 +1,112 @@
 import React, { useState, useEffect } from 'react';
 import BlackNav from './BlackNav.jsx';
+import Footer from './Footer.jsx';
 import '../styles/StorePage.css'; // Import CSS file for StorePage styles
 import Web3 from 'web3';
 
 const StorePage = () => {
-    // Sample data for car parts (replace with your actual data)
-    const [carParts, setCarParts] = useState([
-        { id: 1, name: 'Bumper', price: 500 },
-        { id: 2, name: 'Trunk', price: 100 },
-        { id: 3, name: 'Door', price: 100 },
-        { id: 4, name: 'Trunk', price: 100 },
-        { id: 5, name: 'Side Mirror', price: 50 },
-        { id: 6, name: 'Head Lights', price: 50 },
-        { id: 7, name: 'Back Lights', price: 50 }
-    ]);
-
+    // State for car parts list and cart
+    const [carParts, setCarParts] = useState([]);
     const [cart, setCart] = useState([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
+
+    // State for Ethereum-related data
     const [web3, setWeb3] = useState(null);
     const [userAddress, setUserAddress] = useState('');
     const [ethPrice, setEthPrice] = useState(0);
     const [userBalance, setUserBalance] = useState(0);
 
+    // State for item addition form
+    const [itemName, setItemName] = useState('');
+    const [itemPrice, setItemPrice] = useState('');
+    const [itemImage, setItemImage] = useState('');
+    const [addItemSidebarOpen, setAddItemSidebarOpen] = useState(false);
+    const [inputError, setInputError] = useState('');
+
+    // Function to fetch car parts from backend
+    const fetchCarParts = async () => {
+        try {
+            const response = await fetch('/api/car_parts/');
+            if (!response.ok) {
+                throw new Error('Failed to fetch car parts');
+            }
+            const data = await response.json();
+            setCarParts(data); // Update the state with fetched car parts
+        } catch (error) {
+            console.error('Error fetching car parts:', error);
+        }
+    };
+
+    // Function to handle adding a new item
+    const handleAddItem = async () => {
+        // Validation: Check if all fields are filled
+        if (!itemName || !itemPrice || !itemImage) {
+            setInputError('Please fill in all fields.');
+            return;
+        }
+
+        // Clear input error
+        setInputError('');
+
+        // Add the new item to the list of items with the user's address
+        const newItem = {
+            id: carParts.length + 1,
+            name: itemName,
+            price: parseFloat(itemPrice),
+            image: itemImage,
+            added_by: userAddress // Store the user's address with the item
+        };
+        console.log(newItem);
+        try {
+            console.log("inside try");
+            // Send POST request to backend API endpoint
+            const response = await fetch('/api/add_car_part/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newItem),
+            });
+            console.log("after post");
+            console.log(response);            
+            console.log("after response print");
+
+            if (!response.ok) {
+                console.log("Inside response")
+                throw new Error('Failed to add item');
+            }
+            console.log("before fetchcarparts");
+            // Item added successfully, fetch updated car parts list
+            fetchCarParts();
+            console.log("after fetchcarparts");
+            
+            // Reset input fields
+            setItemName('');
+            setItemPrice('');
+            setItemImage('');
+    
+            // Close the item addition sidebar
+            setAddItemSidebarOpen(false);
+        } catch (error) {
+            console.log("inside catch");
+            console.error('Error adding item:', error);
+            setInputError('Failed to add item. Please try again.');
+        }
+    };
+
+    const toggleAddItemSidebar = () => {
+        setAddItemSidebarOpen(!addItemSidebarOpen);
+        // Close the cart sidebar if it's open
+        if (isCartOpen) {
+            setIsCartOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        // Fetch car parts from backend when the component mounts
+        fetchCarParts();
+    }, []);
+    
     useEffect(() => {
         const initWeb3 = async () => {
             if (window.ethereum) {
@@ -92,6 +177,10 @@ useEffect(() => {
 
     const toggleCart = () => {
         setIsCartOpen(!isCartOpen);
+        // Close the add item sidebar if it's open
+        if (addItemSidebarOpen) {
+            setAddItemSidebarOpen(false);
+        }
     };
 
     const checkout = async () => {
@@ -100,44 +189,54 @@ useEffect(() => {
             return;
         }
     
-        // Check if the cart is empty
         if (cart.length === 0) {
             console.log('Cart is empty. No checkout needed.');
             return;
         }
-    
-        const totalPriceEth = cart.reduce((total, item) => total + (item.price / ethPrice) * item.quantity, 0);
-    
-        console.log('Total price in ETH:', totalPriceEth);
-    
-        // Specify the recipient address (parent account)
-        const parentAccount = '0xC47ADEc15A050c2cbFC88f602381b7F5D15C65Ca'; // Replace with the Ethereum address of your parent account
-    
+        console.log("before transaction try");
         try {
-            // Send transaction using MetaMask
-            const result = await web3.eth.sendTransaction({
-                to: parentAccount, // Specify the recipient address
-                from: userAddress, // Use the user's address as the sender
-                value: web3.utils.toWei(totalPriceEth.toString(), 'ether')
-            });
-            console.log('Transaction successful:', result);
+            for (const item of cart) {
+                console.log('Processing item:', item);
+                console.log('Current user:', userAddress);
+                console.log('item added_by:', item.added_by);
+
+            }
+            for (const item of cart) {
+                // Log the item details for debugging
+                console.log('Processing item:', item);
     
-            // Fetch the user's balance again after successful transaction
+                // Check if the `added_by` field is valid
+                if (!item.added_by || !web3.utils.isAddress(item.added_by)) {
+                    console.error('Invalid or missing Ethereum address for item:', item.name);
+                    continue; // Skip this item and move to the next
+                }
+    
+                const totalPriceEth = (item.price / ethPrice) * item.quantity;
+                console.log('Total price in ETH for item:', item.name, totalPriceEth);
+    
+                // Send transaction using MetaMask
+                const result = await web3.eth.sendTransaction({
+                    to: item.added_by,
+                    from: userAddress,
+                    value: web3.utils.toWei(totalPriceEth.toString(), 'ether')
+                });
+    
+                console.log('Transaction successful for item:', item.name, result);
+            }
+    
             const updatedBalanceWei = await web3.eth.getBalance(userAddress);
             const updatedBalanceEth = web3.utils.fromWei(updatedBalanceWei, 'ether');
             setUserBalance(updatedBalanceEth);
     
-            // Clear the cart after successful transaction
             setCart([]);
-            // Close the cart sidebar
             setIsCartOpen(false);
     
-            // Handle further processing, e.g., update database, display success message, etc.
         } catch (error) {
-            console.error('Error during transaction:', error);
-            // Handle transaction error
+            console.error('Error during transactions:', error);
         }
     };
+    
+    
     
     
     
@@ -154,12 +253,51 @@ useEffect(() => {
                     {carParts.map(part => (
                         <div key={part.id} className="car-part">
                             <h3>{part.name}</h3>
+                            <img src={part.image} alt={part.name} />
                             <p>Price: ${part.price}</p>
+                            {part.addedBy && <p>Added by: {part.addedBy.substring(0, 6)}...</p>}
+
                             <button className="add-to-cart-btn" onClick={() => addToCart(part)}>Add to Cart</button>
                         </div>
                     ))}
                 </div>
             </div>
+
+            {/* Add Item Sidebar */}
+            <div className={`add-item-sidebar ${addItemSidebarOpen ? 'open' : ''}`}>
+                <div className="add-item-header">
+                    <h2>Add an Item</h2>
+                    <button className="close-btn" onClick={toggleAddItemSidebar}>&times;</button>
+                </div>
+                <div className="add-item-form">
+                    <input
+                        type="text"
+                        placeholder="Item Name"
+                        value={itemName}
+                        onChange={(e) => setItemName(e.target.value)}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Price"
+                        value={itemPrice}
+                        onChange={(e) => setItemPrice(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Image URL"
+                        value={itemImage}
+                        onChange={(e) => setItemImage(e.target.value)}
+                    />
+                    {inputError && <p className="error-msg">{inputError}</p>}
+                    <button className="add-item-btn" onClick={handleAddItem}>Add Item</button>
+                </div>
+                
+            </div>
+
+                {/* Button to toggle Add Item Sidebar */}
+                <button className="add-item-icon" onClick={toggleAddItemSidebar}>+</button>
+
+
             {/* Cart Sidebar */}
             <div className={`cart-sidebar ${isCartOpen ? 'open' : ''}`}>
     <div className="cart-header">
@@ -182,12 +320,16 @@ useEffect(() => {
     <p>User Balance: {userBalance} ETH</p>
     <p>Total Price: ${totalPrice}</p> {/* Display total price */}
     <button className="checkout-btn" onClick={checkout}>Checkout</button>
-</div>
+    </div>
 
             {/* Cart Icon Button */}
             <button className="cart-icon-btn" onClick={toggleCart}>Cart</button>
-        </div>
+        
+    <Footer />   
+    </div>
     );
+    
+
 };
 
 export default StorePage;
