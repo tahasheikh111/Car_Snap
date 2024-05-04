@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import StorePage from "./StorePage.jsx";
 import AboutUs from "./AboutUs.jsx";
 import Contact from "./Contact.jsx";
 import Profile from "./Profile.jsx";
@@ -88,6 +89,7 @@ export default class Home extends Component {
               <Route path="/ChatForum" element={<ChatForum senderAddress={senderAddress}/>} />
               <Route path="/login" element={<Login />} />
               <Route path="/Signup" element={<Signup/>} />
+              <Route path="/StorePage" element={<StorePage/>} />
               <Route path="/UploadPage" element=
               {<Upload_page web3={web3} senderAddress={senderAddress}/>} />
 

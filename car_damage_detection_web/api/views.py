@@ -19,7 +19,8 @@ import google.generativeai as genai
 from .models import User, Image, Feedback, Rating, ChatForum, Message,UserProfile
 from .serializer import (
     UserSerializer, ImageSerializer, FeedbackSerializer,
-    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer
+    RatingSerializer, ChatForumSerializer, MessageSerializer,UserProfileSerializer,
+    CarPartSerializer
 )
 
 
@@ -551,3 +552,26 @@ def get_image(request, id):
         return HttpResponse(image_data, content_type='image/jpeg')  # Adjust content type if needed
     except Image.DoesNotExist:
         return Response({"error": "Image not found"}, status=404)
+    
+
+from .models import CarPart
+
+
+@api_view(['GET'])  # Specify that this view only responds to GET requests
+def car_parts_list(request):
+    car_parts = CarPart.objects.all()
+    serializer = CarPartSerializer(car_parts, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def add_car_part(request):
+    if request.method == 'POST':
+        serializer = CarPartSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        else:
+            print("Nihao")
+            print(serializer.errors)  # Print out the errors
+            return Response(serializer.errors, status=400)

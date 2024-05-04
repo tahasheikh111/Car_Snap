@@ -11,5 +11,6 @@ urlpatterns = [
     path('Profile',index1),
     path('UploadPage',index1),
     path('Signup',index1),
-    path('login',index1)
+    path('login',index1),
+    path('StorePage',index1)
 ]

@@ -10,6 +10,7 @@ const BlackNav = () => {
                 <a href="/ReviewPage" className="nav-link">Reviews</a>
                 <a href="/ChatForum" className="nav-link">Community</a>
                 <a href="/Profile" className="nav-link">Profile</a>
+                <a href="/StorePage" className="nav-link">Store Page</a>
             </div>
         </div>
     )
