@@ -167,30 +167,7 @@ const Upload_page = ({ web3, senderAddress }) => {
      console.log(typeof res);
 
                           //const response = await fetch('http://127.0.0.1:8000/api/store-image-result/', {
-                            try {
-                              const newformData = new FormData();
-                              newformData.append("value",res);
-                              newformData.append("image_hash", hash); // Append the user ID
-                              newformData.append("owner_address",senderAddress)
-                              console.log(newformData);
-                          
-                              const response = await fetch("http://127.0.0.1:8000/api/store-result/", {
-                                method: "POST",
-                                body: newformData,
-                              });
-                          
-                              if (response.ok) {
-                                const responseData = await response.json();
-                                console.log("Result uploaded successfully:", responseData);
-                                // Handle further processing if needed
-                              } else {
-                                console.error("Failed to upload result:", response.statusText);
-                                // Handle error
-                              }
-                            } catch (error) {
-                              console.error("Failed:", error);
-                              // Handle error
-                            }
+                            
 
 
 
@@ -226,6 +203,31 @@ const Upload_page = ({ web3, senderAddress }) => {
         });
         // Handle the upload result
         console.log("Upload result:", uploadResult);
+
+        try {
+          const newformData = new FormData();
+          newformData.append("value",res);
+          newformData.append("image_hash", hash); // Append the user ID
+          newformData.append("owner_address",senderAddress)
+          console.log(newformData);
+      
+          const response = await fetch("http://127.0.0.1:8000/api/store-result/", {
+            method: "POST",
+            body: newformData,
+          });
+      
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log("Result uploaded successfully:", responseData);
+            // Handle further processing if needed
+          } else {
+            console.error("Failed to upload result:", response.statusText);
+            // Handle error
+          }
+        } catch (error) {
+          console.error("Failed:", error);
+          // Handle error
+        }
 
     
       };

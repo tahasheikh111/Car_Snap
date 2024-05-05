@@ -51,15 +51,35 @@ const Navbar_home = () => {
       const reviewsData = await Promise.all(
         users.map(async (user) => {
           const userReviews = await instance.getReviewsByUser(user);
+          const reviewsWithResults = await Promise.all(
+            userReviews.map(async (review) => {
+              const result = await fetchResult(review.imageHash);
+              return { ...review, result };
+            })
+          );
           return {
             userDetails: user,
-            reviews: userReviews,
+            reviews: reviewsWithResults,
           };
         })
       );
       setReviews(reviewsData);
     } catch (error) {
       console.error("Error loading reviews:", error);
+    }
+  };
+
+  const fetchResult = async (imageHash) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/get-result/${imageHash}/`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch result');
+      }
+      const data = await response.json();
+      return data.result || 'No result found'; // Return default value if result is null
+    } catch (error) {
+      console.error('Error:', error);
+      return 'Error fetching result';
     }
   };
   const fetchUserData = async () => {
@@ -129,9 +149,8 @@ useEffect(() => {
         <Home_review
           key={reviewIndex}
           photoSrc={`http://127.0.0.1:8000/api/image/${review.imageHash}/`}
-         // heading={handleFetchResult(review.imageHash)}
+          heading={<b>{review.result}</b>}
           description={review.reviewText}
-          name={reviewData.userDetails.username}
           date={new Date(review.date * 1000).toLocaleDateString()} // Format the date
           rating={review.rating}
         />

@@ -2,13 +2,21 @@
 from rest_framework import serializers
 from .models import (
     User, Image, Feedback, Rating, ChatForum, Message, ImagePost, 
-    UserProfile, CarPart
+    UserProfile, CarPart,Result
 )
+
+
+
+class ResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Result
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,6 +27,8 @@ class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = '__all__'
+
+    
 
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
