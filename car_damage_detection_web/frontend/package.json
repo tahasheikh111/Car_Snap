@@ -1,9 +1,12 @@
 {
+    "homepage": "http://tahasheikh111.github.io/Car_Snap",
     "name": "frontend",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
+        "predeploy":"npm run build",
+        "deploy":"gh-pages -d build",
         "dev": "webpack --mode development --watch",
         "build": "webpack --mode production"
     },
